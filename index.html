@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogger Editor</title>
+    <title>Accessible Blogger Editor</title>
     <style>
+        /* CSS styles remain the same as the original */
         * {
             margin: 0;
             padding: 0;
@@ -123,7 +124,7 @@
             color: #5f6368;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             white-space: nowrap;
         }
 
@@ -168,6 +169,10 @@
         #editor:empty:before {
             content: 'Start writing...';
             color: #9aa0a6;
+        }
+        
+        #editor:focus:before {
+            content: '';
         }
 
         /* Table Styles in Editor */
@@ -348,6 +353,13 @@
         .modal-body {
             margin-bottom: 20px;
         }
+        
+        .modal-body label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
 
         .modal-input {
             width: 100%;
@@ -400,12 +412,14 @@
 </head>
 <body>
     <!-- Minimal Header -->
-    <div class="header">
+    <header class="header">
         <div class="header-left">
             <div class="logo">Blogger</div>
-            <input type="text" id="title" placeholder="Post title" />
+            <label for="title" class="hidden">Post Title</label>
+            <input type="text" id="title" placeholder="Post title" aria-label="Post title" />
         </div>
         <div class="header-actions">
+            <label for="blogSelect" class="hidden">Select Blog</label>
             <select id="blogSelect" class="blog-select hidden">
                 <option value="">Select blog...</option>
             </select>
@@ -413,45 +427,47 @@
             <button class="btn btn-primary" onclick="publish()">Publish</button>
             <button class="btn btn-secondary" id="authBtn" onclick="signIn()">Sign In</button>
         </div>
-    </div>
+    </header>
 
     <!-- Flat Toolbar -->
-    <div class="toolbar">
-        <button onclick="execCmd('bold')" title="Bold"><b>B</b></button>
-        <button onclick="execCmd('italic')" title="Italic"><i>I</i></button>
-        <button onclick="execCmd('underline')" title="Underline"><u>U</u></button>
-        <button onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+    <div class="toolbar" role="toolbar" aria-label="Text formatting toolbar">
+        <button onclick="execCmd('bold')" aria-label="Bold"><b>B</b></button>
+        <button onclick="execCmd('italic')" aria-label="Italic"><i>I</i></button>
+        <button onclick="execCmd('underline')" aria-label="Underline"><u>U</u></button>
+        <button onclick="execCmd('strikeThrough')" aria-label="Strikethrough"><s>S</s></button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('formatBlock', 'h1')" title="Heading 1">H1</button>
-        <button onclick="execCmd('formatBlock', 'h2')" title="Heading 2">H2</button>
-        <button onclick="execCmd('formatBlock', 'h3')" title="Heading 3">H3</button>
-        <button onclick="execCmd('formatBlock', 'p')" title="Paragraph">P</button>
+        <button onclick="execCmd('formatBlock', 'h1')" aria-label="Heading 1">H1</button>
+        <button onclick="execCmd('formatBlock', 'h2')" aria-label="Heading 2">H2</button>
+        <button onclick="execCmd('formatBlock', 'h3')" aria-label="Heading 3">H3</button>
+        <button onclick="execCmd('formatBlock', 'p')" aria-label="Paragraph">P</button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('insertUnorderedList')" title="Bullet List">• List</button>
-        <button onclick="execCmd('insertOrderedList')" title="Numbered List">1. List</button>
-        <button onclick="execCmd('formatBlock', 'blockquote')" title="Quote">" Quote</button>
+        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List"><span aria-hidden="true">•</span> List</button>
+        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List"><span aria-hidden="true">1.</span> List</button>
+        <button onclick="execCmd('formatBlock', 'blockquote')" aria-label="Quote"><span aria-hidden="true">"</span> Quote</button>
         <div class="toolbar-divider"></div>
-        <button onclick="insertLink()" title="Insert Link">🔗 Link</button>
-        <button onclick="insertImage()" title="Insert Image">🖼️ Image</button>
-        <button onclick="insertTable()" title="Insert Table">📊 Table</button>
+        <button onclick="openModal('linkModal')" aria-label="Insert Link"><span aria-hidden="true">🔗</span> Link</button>
+        <button onclick="openModal('imageModal')" aria-label="Insert Image"><span aria-hidden="true">🖼️</span> Image</button>
+        <button onclick="openModal('tableModal')" aria-label="Insert Table"><span aria-hidden="true">📊</span> Table</button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('removeFormat')" title="Clear Format">✕ Clear</button>
+        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting"><span aria-hidden="true">✕</span> Clear</button>
     </div>
 
     <!-- Visual Editor -->
-    <div class="editor-container">
+    <main class="editor-container">
         <div class="editor-wrapper">
-            <div id="editor" contenteditable="true"></div>
+            <div id="editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Main content editor"></div>
         </div>
-    </div>
+    </main>
 
     <!-- Table Size Modal -->
-    <div class="modal" id="tableModal">
+    <div class="modal" id="tableModal" role="dialog" aria-modal="true" aria-labelledby="tableModalHeader">
         <div class="modal-content">
-            <div class="modal-header">Insert Table</div>
+            <h2 class="modal-header" id="tableModalHeader">Insert Table</h2>
             <div class="modal-body">
-                <input type="number" id="tableRows" class="modal-input" placeholder="Rows (e.g., 3)" min="1" max="20" value="3">
-                <input type="number" id="tableCols" class="modal-input" placeholder="Columns (e.g., 3)" min="1" max="10" value="3">
+                <label for="tableRows">Rows</label>
+                <input type="number" id="tableRows" class="modal-input" placeholder="e.g., 3" min="1" max="20" value="3">
+                <label for="tableCols">Columns</label>
+                <input type="number" id="tableCols" class="modal-input" placeholder="e.g., 3" min="1" max="10" value="3">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -461,11 +477,13 @@
     </div>
 
     <!-- Link Modal -->
-    <div class="modal" id="linkModal">
+    <div class="modal" id="linkModal" role="dialog" aria-modal="true" aria-labelledby="linkModalHeader">
         <div class="modal-content">
-            <div class="modal-header">Insert Link</div>
+            <h2 class="modal-header" id="linkModalHeader">Insert Link</h2>
             <div class="modal-body">
+                <label for="linkText">Link text</label>
                 <input type="text" id="linkText" class="modal-input" placeholder="Link text">
+                <label for="linkUrl">URL</label>
                 <input type="url" id="linkUrl" class="modal-input" placeholder="https://example.com">
             </div>
             <div class="modal-actions">
@@ -476,12 +494,14 @@
     </div>
 
     <!-- Image Modal -->
-    <div class="modal" id="imageModal">
+    <div class="modal" id="imageModal" role="dialog" aria-modal="true" aria-labelledby="imageModalHeader">
         <div class="modal-content">
-            <div class="modal-header">Insert Image</div>
+            <h2 class="modal-header" id="imageModalHeader">Insert Image</h2>
             <div class="modal-body">
+                <label for="imageUrl">Image URL</label>
                 <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL">
-                <input type="text" id="imageAlt" class="modal-input" placeholder="Alt text (optional)">
+                <label for="imageAlt">Alt text (for accessibility)</label>
+                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -496,6 +516,7 @@
         
         let accessToken = null;
         let blogs = [];
+        let lastSelectionRange = null;
 
         function loadGoogleAPI() {
             const script = document.createElement('script');
@@ -560,55 +581,74 @@
             }
         }
 
+        function saveSelection() {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                lastSelectionRange = selection.getRangeAt(0);
+            }
+        }
+
+        function restoreSelection() {
+            if (lastSelectionRange) {
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(lastSelectionRange);
+            }
+        }
+
         // Editor Commands
         function execCmd(command, value = null) {
             document.execCommand(command, false, value);
             document.getElementById('editor').focus();
         }
 
-        // Insert Table
-        function insertTable() {
-            document.getElementById('tableModal').classList.add('active');
+        function insertHTML(html) {
+            restoreSelection();
+            document.execCommand('insertHTML', false, html);
+        }
+        
+        // Modal Handling
+        function openModal(modalId) {
+            saveSelection();
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            // Focus on the first input field in the modal for accessibility
+            const firstInput = modal.querySelector('input, select, textarea');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        }
+        
+        function closeModal() {
+            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+            document.getElementById('editor').focus();
         }
 
+        // Insert Table
         function createTable() {
             const rows = parseInt(document.getElementById('tableRows').value);
             const cols = parseInt(document.getElementById('tableCols').value);
             
-            if (!rows || !cols || rows < 1 || cols < 1) {
+            if (isNaN(rows) || isNaN(cols) || rows < 1 || cols < 1) {
                 showStatus('Invalid table size', 'error');
                 return;
             }
 
             let table = '<table><thead><tr>';
-            
-            for (let i = 0; i < cols; i++) {
-                table += '<th contenteditable="true">Header ' + (i + 1) + '</th>';
-            }
+            for (let i = 0; i < cols; i++) table += '<th contenteditable="true">Header ' + (i + 1) + '</th>';
             table += '</tr></thead><tbody>';
-            
             for (let i = 0; i < rows; i++) {
                 table += '<tr>';
-                for (let j = 0; j < cols; j++) {
-                    table += '<td contenteditable="true">Data</td>';
-                }
+                for (let j = 0; j < cols; j++) table += '<td contenteditable="true">Data</td>';
                 table += '</tr>';
             }
+            table += '</tbody></table><p><br></p>'; // Add a paragraph after for easier editing
             
-            table += '</tbody></table><p><br></p>';
-            
-            document.execCommand('insertHTML', false, table);
+            insertHTML(table);
             closeModal();
-            document.getElementById('editor').focus();
         }
 
         // Insert Link
-        function insertLink() {
-            document.getElementById('linkModal').classList.add('active');
-            document.getElementById('linkText').value = '';
-            document.getElementById('linkUrl').value = '';
-        }
-
         function createLink() {
             const text = document.getElementById('linkText').value;
             const url = document.getElementById('linkUrl').value;
@@ -619,18 +659,11 @@
             }
             
             const link = `<a href="${url}">${text || url}</a>`;
-            document.execCommand('insertHTML', false, link);
+            insertHTML(link);
             closeModal();
-            document.getElementById('editor').focus();
         }
 
         // Insert Image
-        function insertImage() {
-            document.getElementById('imageModal').classList.add('active');
-            document.getElementById('imageUrl').value = '';
-            document.getElementById('imageAlt').value = '';
-        }
-
         function createImage() {
             const url = document.getElementById('imageUrl').value;
             const alt = document.getElementById('imageAlt').value;
@@ -641,16 +674,10 @@
             }
             
             const img = `<img src="${url}" alt="${alt || 'Image'}" style="max-width:100%;height:auto;"><p><br></p>`;
-            document.execCommand('insertHTML', false, img);
+            insertHTML(img);
             closeModal();
-            document.getElementById('editor').focus();
         }
-
-        // Close Modal
-        function closeModal() {
-            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-        }
-
+        
         // Publish/Draft
         async function publish() {
             await publishPost(false);
@@ -669,12 +696,10 @@
                 showStatus('Please enter title and content', 'error');
                 return;
             }
-
             if (!blogId) {
                 showStatus('Please select a blog', 'error');
                 return;
             }
-
             if (!accessToken) {
                 showStatus('Please sign in first', 'error');
                 return;
@@ -705,7 +730,8 @@
                         setTimeout(() => window.open(result.url, '_blank'), 1000);
                     }
                 } else {
-                    showStatus('Failed to publish', 'error');
+                    const errorData = await response.json();
+                    showStatus(`Failed to publish: ${errorData.error.message}`, 'error');
                 }
             } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
@@ -713,18 +739,9 @@
         }
 
         function formatForBlogger(html) {
-            // Wrap in responsive container
+            // This function can be expanded to clean up contenteditable artifacts if needed.
+            // For now, it just wraps content for responsiveness.
             let formatted = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;">${html}</div>`;
-            
-            // Make tables responsive
-            formatted = formatted.replace(/<table>/g, '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;margin:20px 0;">');
-            formatted = formatted.replace(/<\/table>/g, '</table></div>');
-            formatted = formatted.replace(/<th>/g, '<th style="border:1px solid #dadce0;padding:12px;background:#f8f9fa;font-weight:600;text-align:left;">');
-            formatted = formatted.replace(/<td>/g, '<td style="border:1px solid #dadce0;padding:12px;">');
-            
-            // Style images
-            formatted = formatted.replace(/<img /g, '<img style="max-width:100%;height:auto;margin:20px 0;" ');
-            
             return formatted;
         }
 
@@ -735,20 +752,36 @@
             const status = document.createElement('div');
             status.className = `status ${type}`;
             status.textContent = message;
+            // Make status messages accessible to screen readers
+            status.setAttribute('role', 'status');
+            status.setAttribute('aria-live', 'polite');
             document.body.appendChild(status);
             
-            setTimeout(() => status.remove(), 3000);
+            setTimeout(() => status.remove(), 4000);
         }
 
+        // --- Accessibility & Usability Event Listeners ---
+        
         // Initialize
-        loadGoogleAPI();
+        document.addEventListener('DOMContentLoaded', loadGoogleAPI);
 
-        // Close modals on click outside
+        // Close modals on click outside or with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) closeModal();
             });
         });
+
+        // Save selection whenever it changes in the editor
+        document.getElementById('editor').addEventListener('keyup', saveSelection);
+        document.getElementById('editor').addEventListener('mouseup', saveSelection);
+
     </script>
 </body>
 </html>
