@@ -1,267 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blogger Editor Pro — Standalone Theme</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blogger Editor Pro</title>
   <style>
-    /* -------------------------
-       Editor theme (self-contained)
-       ------------------------- */
-    :root{
-      /* Primary values from your theme XML */
-      --keycolor: #f67938;            /* $(keycolor) */
-      --body-bg: #ffffff;             /* body.background */
-      --body-text: #212529;           /* body.text.color */
-      --heading: #000000;             /* posts.title.color */
-      --header-bg: #ffffff;           /* header.bg */
-      --header-color: #000000;        /* header.color */
-      --border: #efefef;              /* border.color */
-      --accent: #667eea;              /* used in small places */
-      --radius: 12px;
-      --shadow-soft: 0 8px 30px rgba(16,24,40,0.06);
-      --shadow-strong: 0 14px 50px rgba(16,24,40,0.09);
-      --muted: #6b7280;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-      --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    * {margin:0;padding:0;box-sizing:border-box}
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+      background:#f8f9fa;
+      color:#202124;
     }
 
-    /* Dark theme values (from your .dark-mode block) */
-    html.editor-dark {
-      --body-bg: #0f0d15;
-      --body-text: #e8e6f1;
-      --heading: #ffffff;
-      --header-bg: #1c1822;
-      --header-color: #ffffff;
-      --border: #2d2635;
-      --accent: #ffb066; /* warm accent for headings/links */
-      --shadow-soft: 0 8px 30px rgba(0,0,0,0.6);
-      --shadow-strong: 0 18px 70px rgba(0,0,0,0.7);
-      --muted: #b6b0c2;
-    }
-
-    /* Also respect system preference on first run */
-    @media (prefers-color-scheme: dark) {
-      :root:not(.editor-forced-light) { /* only if user didn't force light later */
-        --body-bg: #0f0d15;
-        --body-text: #e8e6f1;
-        --heading: #ffffff;
-        --header-bg: #1c1822;
-        --header-color: #ffffff;
-        --border: #2d2635;
-        --accent: #ffb066;
-        --muted: #b6b0c2;
-      }
-    }
-
-    /* Basic layout & reset */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
-      font-family:var(--ui-font);
-      background:var(--body-bg);
-      color:var(--body-text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding-bottom:48px;
-    }
-
-    /* Header */
-    .header{
-      background:var(--header-bg);
-      color:var(--header-color);
-      border-bottom:1px solid var(--border);
-      position:sticky;top:0;z-index:200;
-      box-shadow:var(--shadow-soft);
-      backdrop-filter: blur(6px);
-      padding:12px 18px;
-    }
-    .header-content{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .header h1{font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px}
-    .auth-section{display:flex;gap:8px;align-items:center}
-    .auth-section button{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:8px 12px;border-radius:10px;cursor:pointer;color:var(--header-color)}
-    .auth-section button:hover{transform:translateY(-2px)}
-
-    /* Theme toggle */
-    #themeToggle{font-size:16px;padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer}
-
-    /* Editor container */
-    .container{max-width:1200px;margin:18px auto;padding:0 18px}
-    .editor-card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-      border-radius:calc(var(--radius) + 6px);
+    .header {
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      color:white;
       padding:20px;
-      box-shadow:var(--shadow-strong);
-      border:1px solid var(--border);
-      overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);
+      position:sticky;
+      top:0;
+      z-index:100;
     }
-    .section-title{font-weight:700;margin-bottom:12px;color:var(--heading);display:flex;align-items:center;gap:10px}
 
-    /* Title input */
-    #title{
-      width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border);font-size:20px;font-weight:700;color:var(--body-text);
-      margin-bottom:12px;background:transparent;
+    .header-content {
+      max-width:1400px;
+      margin:0 auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:15px;
     }
-    #title::placeholder{color:var(--muted)}
 
-    /* Toolbar */
-    .toolbar{
-      display:flex;flex-wrap:wrap;gap:8px;padding:10px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
-      border:1px solid var(--border);margin-bottom:12px;
+    .header h1 {font-size:24px;font-weight:700}
+    .auth-section button {
+      background:rgba(255,255,255,0.2);
+      color:white;
+      border:2px solid white;
+      padding:10px 24px;
+      border-radius:25px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      transition:all .3s;
     }
-    .toolbar-section{display:flex;gap:8px;align-items:center;padding-right:8px;border-right:1px solid rgba(0,0,0,0.04)}
-    .toolbar-section:last-child{border-right:none}
-    .toolbar button{
-      background:transparent;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--muted);font-weight:700;min-width:42px;
+    .auth-section button:hover {
+      background:white;
+      color:#667eea;
     }
-    .toolbar button:hover{background:linear-gradient(180deg, rgba(102,126,234,0.06), rgba(118,75,162,0.02));color:var(--body-text);transform:translateY(-2px)}
-    .toolbar button:focus{outline:3px solid rgba(102,126,234,0.12);outline-offset:2px}
 
-    /* Content area (keep textarea so your existing JS works) */
-    #content{
-      width:100%;min-height:460px;padding:18px;border-radius:12px;border:1px solid var(--border);resize:vertical;
-      font-size:15.6px;line-height:1.8;background:transparent;color:var(--body-text);font-family:inherit;
-      box-shadow: inset 0 -1px 0 rgba(0,0,0,0.02);
+    .user-info {display:flex;align-items:center;gap:15px}
+    .user-email {font-size:14px;opacity:.9}
+
+    .container {max-width:1400px;margin:0 auto;padding:20px}
+    .editor-card {
+      background:white;
+      border-radius:12px;
+      padding:30px;
+      box-shadow:0 2px 16px rgba(0,0,0,0.08);
+      margin-bottom:20px;
     }
-    #content::placeholder{color:var(--muted)}
 
-    /* Actions */
-    .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:16px}
-    .actions button{padding:12px 14px;border-radius:12px;border:none;font-weight:800;cursor:pointer}
-    .btn-publish{background:linear-gradient(135deg,var(--accent),#764ba2);color:white;box-shadow:0 12px 36px rgba(102,126,234,0.12)}
-    .btn-draft{background:linear-gradient(180deg,#4b5563,#111827);color:white}
-    .btn-clear{background:transparent;border:1px solid var(--border);color:var(--muted)}
+    .section-title {
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:20px;
+      color:#202124;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-    /* Status */
-    .status{padding:12px 16px;border-radius:10px;margin-bottom:12px;display:none;font-weight:700}
-    .status.success{background:rgba(16,185,129,0.06);color:#10b981;border-left:4px solid #10b981;display:block}
-    .status.error{background:rgba(239,68,68,0.06);color:#ef4444;border-left:4px solid #ef4444;display:block}
-    .status.info{background:rgba(59,130,246,0.06);color:var(--accent);border-left:4px solid var(--accent);display:block}
+    .blog-selector {margin-bottom:20px}
+    .blog-selector label {
+      display:block;
+      margin-bottom:8px;
+      font-weight:500;
+      color:#5f6368;
+    }
 
-    /* Modal (table builder) */
-    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.48);z-index:1200;align-items:center;justify-content:center;padding:18px}
+    .blog-selector select,input[type="text"],textarea {
+      width:100%;
+      padding:14px;
+      border:2px solid #e8eaed;
+      border-radius:8px;
+      font-size:15px;
+      font-family:inherit;
+      transition:all .3s;
+      background:white;
+    }
+
+    .blog-selector select:focus,input[type="text"]:focus,textarea:focus {
+      outline:none;
+      border-color:#667eea;
+      box-shadow:0 0 0 3px rgba(102,126,234,0.1);
+    }
+
+    #title {font-size:28px;font-weight:600;margin-bottom:20px}
+    .toolbar {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:20px;
+      padding:15px;
+      background:#f8f9fa;
+      border-radius:8px;
+      border:1px solid #e8eaed;
+    }
+
+    .toolbar-section {
+      display:flex;
+      gap:6px;
+      padding-right:10px;
+      border-right:1px solid #dadce0;
+    }
+    .toolbar-section:last-child {border-right:none}
+    .toolbar button {
+      background:white;
+      border:1px solid #dadce0;
+      padding:8px 14px;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:500;
+      transition:all .2s;
+      color:#5f6368;
+      white-space:nowrap;
+    }
+    .toolbar button:hover {
+      background:#667eea;
+      color:white;
+      border-color:#667eea;
+      transform:translateY(-1px);
+    }
+
+    #content {min-height:500px;resize:vertical;line-height:1.8;font-size:16px}
+
+    .actions {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+      gap:12px;
+      margin-top:25px;
+    }
+
+    .actions button {
+      padding:14px 24px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:15px;
+      font-weight:600;
+      transition:all .3s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .btn-publish {
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      color:white;
+      box-shadow:0 4px 12px rgba(102,126,234,0.4);
+    }
+    .btn-publish:hover {
+      transform:translateY(-2px);
+      box-shadow:0 6px 20px rgba(102,126,234,0.5);
+    }
+
+    .btn-draft {background:#5f6368;color:white}
+    .btn-draft:hover {background:#4a4d51;transform:translateY(-2px)}
+    .btn-clear {background:#f1f3f4;color:#5f6368}
+    .btn-clear:hover {background:#e8eaed}
+
+    .status {
+      padding:14px 18px;
+      border-radius:8px;
+      margin-bottom:20px;
+      font-size:14px;
+      font-weight:500;
+    }
+    .status.success{background:#e6f4ea;color:#137333;border-left:4px solid #34a853}
+    .status.error{background:#fce8e6;color:#c5221f;border-left:4px solid #ea4335}
+    .status.info{background:#e8f0fe;color:#1967d2;border-left:4px solid #4285f4}
+    .status a{color:inherit;font-weight:700;text-decoration:underline}
+
+    .hidden{display:none}
+    /* Modal styling (unchanged) */
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;overflow-y:auto;padding:20px}
     .modal.active{display:flex}
-    .modal-content{width:100%;max-width:980px;background:var(--header-bg);border-radius:12px;padding:16px;box-shadow:var(--shadow-strong);border:1px solid var(--border);max-height:90vh;overflow:auto}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-    .modal-close{background:transparent;border:none;font-size:22px;cursor:pointer}
-    .table-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .table-controls button{padding:8px 12px;border-radius:8px;border:none;background:var(--accent);color:white;cursor:pointer}
+    .modal-content{background:white;padding:30px;border-radius:12px;max-width:95%;width:100%;max-height:90vh;overflow-y:auto}
+    .modal-header{font-size:20px;font-weight:600;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+    .modal-close{background:#f1f3f4;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center}
 
-    /* Editable table preview */
-    .editable-table{width:100%;border-collapse:collapse}
-    .editable-table th,.editable-table td{padding:12px;border:1px solid rgba(0,0,0,0.06);min-width:120px}
-    .editable-table th{background:var(--accent);color:white;font-weight:700}
-    .cell-input{width:100%;border:none;background:transparent;padding:6px;font-size:14px}
-    .cell-input:focus{outline:2px solid rgba(102,126,234,0.12)}
+    .table-controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .table-controls button{padding:8px 16px;background:#667eea;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500}
+    .table-controls button:hover{background:#5568d3}
+    .table-editor{overflow-x:auto;margin-bottom:20px}
+    .editable-table{width:100%;border-collapse:collapse;background:white}
+    .editable-table th,.editable-table td{border:2px solid #667eea;padding:12px;min-width:120px}
+    .editable-table th{background:#667eea;color:white;font-weight:600}
+    .editable-table tr:nth-child(even) td{background:#f8f9fa}
+    .cell-input{width:100%;border:none;background:transparent;padding:4px;font-size:14px;font-family:inherit}
+    .cell-input:focus{outline:2px solid #667eea;background:#fff}
+    .table-actions{display:flex;gap:10px;margin-top:20px}
+    .table-actions button{flex:1;padding:12px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
+    .btn-insert{background:#667eea;color:white}
+    .btn-cancel{background:#e8eaed;color:#5f6368}
 
-    /* When your script inserts tables it uses <div style="overflow-x:auto"> — this ensures consistent styling */
-    .post-table-wrapper{overflow-x:auto;border-radius:8px;padding:8px;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.02));margin:12px 0}
-    .styled-table{width:100%;border-collapse:collapse;min-width:300px}
-    .styled-table th{background:var(--accent);color:white;padding:12px;border:1px solid rgba(0,0,0,0.04)}
-    .styled-table td{padding:12px;border:1px solid rgba(0,0,0,0.04)}
-
-    /* Code blocks (formatContent generates <pre> blocks) */
-    pre{background:var(--body-text);color:var(--body-bg);padding:14px;border-radius:10px;overflow:auto;font-family:var(--mono)}
-    /* Links inside content */
-    a.preview-link{color:var(--accent);font-weight:700;text-decoration:none}
-
-    /* Responsiveness */
-    @media (max-width:900px){
-      .header-content{padding:0 8px}
-      .container{padding:0 12px}
-      #content{min-height:360px}
-    }
-    @media (max-width:520px){
-      .toolbar{padding:8px}
-      .editor-card{padding:14px}
+    @media(max-width:768px){
+      .header h1{font-size:20px}
+      .editor-card{padding:20px}
+      #title{font-size:22px}
+      .toolbar button{padding:8px 12px;font-size:13px}
+      #content{min-height:400px;font-size:15px}
       .actions{grid-template-columns:1fr}
+      .editable-table th,.editable-table td{min-width:80px;padding:8px;font-size:13px}
     }
-
-    /* Accessibility helper */
-    .sr-only{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
   </style>
 </head>
 
 <body>
-  <div class="header" role="banner">
+  <div class="header">
     <div class="header-content">
-      <h1>✍️ <span style="font-weight:900">Blogger Editor Pro</span></h1>
-
-      <div style="display:flex;align-items:center;gap:8px">
-        <!-- Theme toggle (standalone) -->
-        <button id="themeToggle" onclick="toggleEditorTheme()" aria-label="Toggle editor theme">☀️</button>
-
-        <div class="auth-section">
-          <div id="signedOut">
-            <button onclick="signIn()" aria-label="Sign in with Google">Sign in</button>
-          </div>
-          <div id="signedIn" class="user-info hidden" aria-hidden="true">
-            <span class="user-email" id="userEmail"></span>
-            <button onclick="signOut()">Sign Out</button>
-          </div>
+      <h1>✍️ Blogger Editor Pro</h1>
+      <div class="auth-section">
+        <div id="signedOut"><button onclick="signIn()">Sign in with Google</button></div>
+        <div id="signedIn" class="user-info hidden">
+          <span class="user-email" id="userEmail"></span>
+          <button onclick="signOut()">Sign Out</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="container">
-    <div class="editor-card" role="main" aria-labelledby="editorTitle">
-      <div id="statusMessage" class="status info" style="display:none"></div>
+    <div class="editor-card">
+      <div id="statusMessage"></div>
 
-      <div class="blog-selector" id="blogSelector" style="display:none;margin-bottom:12px">
-        <label for="blogSelect" style="font-weight:700;color:var(--muted);margin-bottom:8px;display:block">📚 Select Your Blog</label>
-        <select id="blogSelect" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent">
-          <option value="">Choose a blog...</option>
-        </select>
+      <div class="blog-selector" id="blogSelector" style="display:none;">
+        <label for="blogSelect">📚 Select Your Blog:</label>
+        <select id="blogSelect"><option value="">Choose a blog...</option></select>
       </div>
 
-      <div class="section-title" id="editorTitle">📝 Post Details</div>
-      <input type="text" id="title" placeholder="Enter your post title here..." aria-label="Post title" />
+      <div class="section-title">📝 Post Details</div>
+      <input type="text" id="title" placeholder="Enter your post title here..." />
 
-      <div class="toolbar" role="toolbar" aria-label="Formatting toolbar">
+      <div class="toolbar">
         <div class="toolbar-section">
-          <button onclick="insertFormatting('**', '**')" title="Bold" aria-label="Bold"><strong>B</strong></button>
-          <button onclick="insertFormatting('*', '*')" title="Italic" aria-label="Italic"><em>I</em></button>
-          <button onclick="insertFormatting('~~', '~~')" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
-          <button onclick="insertFormatting('`', '`')" title="Inline code" aria-label="Inline code">&lt;/&gt;</button>
+          <button onclick="insertFormatting('**','**')"><strong>B</strong></button>
+          <button onclick="insertFormatting('*','*')"><em>I</em></button>
+          <button onclick="insertFormatting('~~','~~')"><s>S</s></button>
+          <button onclick="insertFormatting('`','`')">&lt;/&gt;</button>
         </div>
-
         <div class="toolbar-section">
-          <button onclick="insertFormatting('\n## ', '')" title="Heading 2" aria-label="Heading 2">H2</button>
-          <button onclick="insertFormatting('\n### ', '')" title="Heading 3" aria-label="Heading 3">H3</button>
-          <button onclick="insertFormatting('\n#### ', '')" title="Heading 4" aria-label="Heading 4">H4</button>
+          <button onclick="insertFormatting('\n## ','')">H2</button>
+          <button onclick="insertFormatting('\n### ','')">H3</button>
+          <button onclick="insertFormatting('\n#### ','')">H4</button>
         </div>
-
         <div class="toolbar-section">
-          <button onclick="insertFormatting('\n- ', '')" title="Bullet list" aria-label="Bullet list">• List</button>
-          <button onclick="insertFormatting('\n1. ', '')" title="Numbered list" aria-label="Numbered list">1. List</button>
-          <button onclick="insertFormatting('\n> ', '')" title="Quote" aria-label="Quote">“ Quote</button>
+          <button onclick="insertFormatting('\n- ','')">• List</button>
+          <button onclick="insertFormatting('\n1. ','')">1. List</button>
+          <button onclick="insertFormatting('\n> ','')">" Quote</button>
         </div>
-
         <div class="toolbar-section">
-          <button onclick="insertLink()" title="Insert link" aria-label="Insert link">🔗 Link</button>
-          <button onclick="insertImage()" title="Insert image" aria-label="Insert image">🖼️ Image</button>
-          <button onclick="openTableBuilder()" title="Insert table" aria-label="Insert table">📊 Table</button>
+          <button onclick="insertLink()">🔗 Link</button>
+          <button onclick="insertImage()">🖼️ Image</button>
+          <button onclick="openTableBuilder()">📊 Table</button>
         </div>
-
         <div class="toolbar-section">
-          <button onclick="insertFormatting('\n---\n', '')" title="Horizontal line" aria-label="Horizontal line">── Line</button>
-          <button onclick="insertFormatting('\n```\n', '\n```\n')" title="Code block" aria-label="Code block">Code Block</button>
+          <button onclick="insertFormatting('\n---\n','')">━━ Line</button>
+          <button onclick="insertFormatting('\n```\n','\n```\n')">Code Block</button>
         </div>
       </div>
 
-      <textarea id="content" placeholder="Start writing your amazing content here...
+      <textarea id="content" placeholder="Start writing your content..."></textarea>
 
-Tips:
-• Use bold or italic for emphasis (select text then click B or I)
-• Add links with the Link button
-• Insert images with the Image button (URL required)
-• Create headings with H2/H3 buttons
-• Add lists with • or 1. buttons
-• Use the Table button to build responsive, scrollable tables (no code visible)"></textarea>
-
-      <div class="actions" aria-hidden="false">
+      <div class="actions">
         <button class="btn-publish" onclick="publishPost(false)" id="publishBtn" disabled>🚀 Publish Post</button>
         <button class="btn-draft" onclick="publishPost(true)" id="draftBtn" disabled>💾 Save as Draft</button>
         <button class="btn-clear" onclick="clearEditor()">🗑️ Clear All</button>
@@ -269,14 +283,10 @@ Tips:
     </div>
   </div>
 
-  <!-- Table modal (layout + styles updated earlier) -->
-  <div class="modal" id="tableModal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-content" role="document">
-      <div class="modal-header">
-        <span style="font-weight:700">📊 Create Interactive Table</span>
-        <button class="modal-close" onclick="closeTableBuilder()" aria-label="Close table builder">×</button>
-      </div>
-
+  <!-- Table Modal -->
+  <div class="modal" id="tableModal">
+    <div class="modal-content">
+      <div class="modal-header"><span>📊 Create Interactive Table</span><button class="modal-close" onclick="closeTableBuilder()">×</button></div>
       <div class="table-controls">
         <button onclick="changeTableSize()">📏 Resize Table</button>
         <button onclick="addRow()">➕ Add Row</button>
@@ -284,439 +294,202 @@ Tips:
         <button onclick="addColumn()">➕ Add Column</button>
         <button onclick="deleteColumn()">➖ Delete Column</button>
       </div>
-
-      <div class="table-editor">
-        <table class="editable-table" id="editableTable"></table>
-      </div>
-
-      <div style="display:flex;gap:12px;margin-top:12px">
-        <button class="btn-insert" onclick="insertTableToPost()" style="flex:1;padding:12px;border-radius:10px;background:var(--accent);color:white;border:none">Insert Table</button>
-        <button class="btn-cancel" onclick="closeTableBuilder()" style="flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:transparent">Cancel</button>
+      <div class="table-editor"><table class="editable-table" id="editableTable"></table></div>
+      <div class="table-actions">
+        <button class="btn-insert" onclick="insertTableToPost()">Insert Table</button>
+        <button class="btn-cancel" onclick="closeTableBuilder()">Cancel</button>
       </div>
     </div>
   </div>
 
-  <!-- ===========================
-       Theme toggle & auto-apply JS
-       (keeps everything standalone; does not touch your editor logic)
-       =========================== -->
   <script>
-    (function(){
-      const KEY = 'editor-theme'; // localStorage key
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
+  const CLIENT_ID='942968999133-nuldtmg604hjfogobnpeaq55vhd0v4tr.apps.googleusercontent.com';
+  const SCOPES='https://www.googleapis.com/auth/blogger';
+  let accessToken=null,blogs=[],currentTable=null;
 
-      function applyTheme(mode) {
-        if(mode === 'dark') {
-          root.classList.add('editor-dark');
-          btn && (btn.textContent = '🌙');
-        } else {
-          root.classList.remove('editor-dark');
-          btn && (btn.textContent = '☀️');
-        }
+  function loadGoogleAPI(){
+    const s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';
+    s.onload=initializeGoogleSignIn;
+    document.head.appendChild(s);
+  }
+  function initializeGoogleSignIn(){
+    google.accounts.id.initialize({client_id:CLIENT_ID,callback:handleCredentialResponse});
+  }
+  function signIn(){
+    const c=google.accounts.oauth2.initTokenClient({
+      client_id:CLIENT_ID,scope:SCOPES,
+      callback:(r)=>{if(r.access_token){accessToken=r.access_token;onSignIn();}}
+    });
+    c.requestAccessToken();
+  }
+  function handleCredentialResponse(){}
+  async function onSignIn(){
+    document.getElementById('signedOut').classList.add('hidden');
+    document.getElementById('signedIn').classList.remove('hidden');
+    await loadUserBlogs();
+    document.getElementById('publishBtn').disabled=false;
+    document.getElementById('draftBtn').disabled=false;
+    showStatus('✅ Signed in successfully','success');
+  }
+  async function loadUserBlogs(){
+    try{
+      const r=await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs',{headers:{'Authorization':`Bearer ${accessToken}`}});
+      const d=await r.json();blogs=d.items||[];
+      const sel=document.getElementById('blogSelect');
+      sel.innerHTML='<option value="">Choose a blog...</option>';
+      blogs.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;sel.appendChild(o);});
+      document.getElementById('userEmail').textContent=`${blogs.length} blog(s) loaded`;
+      document.getElementById('blogSelector').style.display='block';
+    }catch(e){showStatus('❌ Error loading blogs: '+e.message,'error');}
+  }
+  function signOut(){
+    accessToken=null;
+    document.getElementById('signedOut').classList.remove('hidden');
+    document.getElementById('signedIn').classList.add('hidden');
+    document.getElementById('blogSelector').style.display='none';
+    document.getElementById('publishBtn').disabled=true;
+    document.getElementById('draftBtn').disabled=true;
+    showStatus('👋 Signed out successfully','info');
+  }
+
+  async function publishPost(isDraft){
+    const title=document.getElementById('title').value.trim();
+    const content=document.getElementById('content').value.trim();
+    const blogId=document.getElementById('blogSelect').value;
+    if(!title||!content){showStatus('⚠️ Please enter both title and content','error');return;}
+    if(!blogId){showStatus('⚠️ Please select a blog','error');return;}
+    const post={kind:'blogger#post',blog:{id:blogId},title:title,content:formatContent(content)};
+    try{
+      showStatus('⏳ Publishing...','info');
+      const url=`https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`;
+      const r=await fetch(url+(isDraft?'?isDraft=true':''),{
+        method:'POST',
+        headers:{'Authorization':`Bearer ${accessToken}`,'Content-Type':'application/json'},
+        body:JSON.stringify(post)
+      });
+      if(r.ok){
+        const res=await r.json();
+        showStatus(`🎉 Post ${isDraft?'saved as draft':'published'}! <a href="${res.url}" target="_blank">View</a>`,'success');
+      }else{
+        const e=await r.json();
+        showStatus('❌ Error: '+(e.error.message||'Failed'),'error');
       }
+    }catch(e){showStatus('❌ Error: '+e.message,'error');}
+  }
 
-      // Expose toggle function globally for the button
-      window.toggleEditorTheme = function() {
-        const isDark = root.classList.contains('editor-dark');
-        const next = isDark ? 'light' : 'dark';
-        applyTheme(next);
-        localStorage.setItem(KEY, next);
-        // mark if user forced light so prefers-color-scheme won't override
-        if(next === 'light') root.classList.add('editor-forced-light'); else root.classList.remove('editor-forced-light');
-      };
+  // === Dark/Light theme adaptive formatter ===
+  function formatContent(text){
+    let html=text;
+    html=html
+      .replace(/```\n([\s\S]+?)\n```/g,(m,code)=>`<pre><code>${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
+      .replace(/`([^`]+)`/g,'<code>$1</code>')
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<div><img src="$2" alt="$1"></div>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
+      .replace(/(^|\n)#### (.+)/g,'$1<h4>$2</h4>')
+      .replace(/(^|\n)### (.+)/g,'$1<h3>$2</h3>')
+      .replace(/(^|\n)## (.+)/g,'$1<h2>$2</h2>')
+      .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+      .replace(/~~([^~]+)~~/g,'<s>$1</s>')
+      .replace(/(^|\n)> (.+)/g,'$1<blockquote>$2</blockquote>')
+      .replace(/(^|\n)---(\n|$)/g,'$1<hr>$2')
+      .replace(/(^|\n)(\d+)\. (.+)/g,'$1<li>$3</li>')
+      .replace(/(^|\n)- (.+)/g,'$1<li>$2</li>')
+      .replace(/(<li[^>]*>.*?<\/li>\n?)+/g,m=>'<ul>'+m+'</ul>')
+      .replace(/\n\n+/g,'</p><p>')
+      .replace(/\n/g,'<br>');
 
-      // On load: priority -> saved choice -> prefers-color-scheme -> light
-      const saved = localStorage.getItem(KEY);
-      if(saved) {
-        applyTheme(saved);
-        if(saved === 'light') root.classList.add('editor-forced-light');
-      } else {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark ? 'dark' : 'light');
-      }
+    const style=`
+<style>
+:root{
+--post-bg:#fff;--post-text:#202124;--post-link:#4c6ef5;--post-border:#e8eaed;--post-code-bg:#f1f3f4;--post-quote-bg:#f8f9fa;
+}
+@media(prefers-color-scheme:dark){
+:root{
+--post-bg:#181818;--post-text:#e8eaed;--post-link:#8ab4f8;--post-border:#333;--post-code-bg:#242526;--post-quote-bg:#202124;
+}}
+.post-content{background:var(--post-bg);color:var(--post-text);font-size:16px;line-height:1.8;word-wrap:break-word}
+.post-content a{color:var(--post-link);text-decoration:none;font-weight:500}
+.post-content a:hover{text-decoration:underline}
+.post-content blockquote{border-left:4px solid var(--post-link);padding:12px 20px;background:var(--post-quote-bg);border-radius:4px;font-style:italic}
+.post-content pre{background:var(--post-code-bg);color:var(--post-text);padding:16px;border-radius:8px;overflow-x:auto}
+.post-content code{background:var(--post-code-bg);color:var(--post-text);padding:2px 6px;border-radius:4px;font-family:monospace}
+.post-content table{width:100%;border-collapse:collapse;margin:20px 0;border:1px solid var(--post-border)}
+.post-content th{background:var(--post-link);color:#fff;padding:12px;text-align:left}
+.post-content td{background:var(--post-bg);color:var(--post-text);padding:12px;border:1px solid var(--post-border)}
+.post-content tr:nth-child(even) td{background:var(--post-quote-bg)}
+.post-content img{max-width:100%;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
+</style>`;
 
-      // Keep button label updated if user changes system theme while editor open
-      if(window.matchMedia) {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', e => {
-          const saved2 = localStorage.getItem(KEY);
-          if(!saved2) applyTheme(e.matches ? 'dark' : 'light');
-        });
-      }
-    })();
-  </script>
+    return `${style}<div class="post-content"><p>${html}</p></div>`;
+  }
 
-  <!-- ===========================
-       YOUR ORIGINAL SCRIPTS (left intact)
-       I did not change any function or ID — this is verbatim from your file.
-       =========================== -->
-  <script>
-    const CLIENT_ID = '942968999133-nuldtmg604hjfogobnpeaq55vhd0v4tr.apps.googleusercontent.com';
-    const SCOPES = 'https://www.googleapis.com/auth/blogger';
-    
-    let accessToken = null;
-    let blogs = [];
-    let currentTable = null;
+  // === utility functions ===
+  function insertFormatting(before,after){
+    const t=document.getElementById('content');
+    const s=t.selectionStart,e=t.selectionEnd,txt=t.value;
+    const sel=txt.substring(s,e);
+    t.value=txt.substring(0,s)+before+sel+after+txt.substring(e);
+    t.focus();t.selectionStart=s+before.length;t.selectionEnd=s+before.length+sel.length;
+  }
+  function insertLink(){
+    const url=prompt('Enter URL:');if(url){const text=prompt('Enter link text:','Click here');if(text)insertFormatting(`[${text}](`,`${url})`);}
+  }
+  function insertImage(){
+    const url=prompt('Enter image URL:');if(url){const alt=prompt('Alt text:','Image');if(alt)insertFormatting(`\n![${alt}](`,`${url})\n`);}
+  }
 
-    function loadGoogleAPI() {
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.onload = initializeGoogleSignIn;
-        document.head.appendChild(script);
+  // table functions (unchanged)
+  function openTableBuilder(){document.getElementById('tableModal').classList.add('active');createTable(3,3);}
+  function closeTableBuilder(){document.getElementById('tableModal').classList.remove('active');}
+  function createTable(r,c){
+    const t=document.getElementById('editableTable');t.innerHTML='';
+    const h=t.createTHead(),hr=h.insertRow();
+    for(let i=0;i<c;i++){const th=document.createElement('th');th.innerHTML=`<input type="text" class="cell-input" value="Header ${i+1}"/>`;hr.appendChild(th);}
+    const b=t.createTBody();
+    for(let i=0;i<r;i++){const row=b.insertRow();for(let j=0;j<c;j++){const cell=row.insertCell();cell.innerHTML=`<input type="text" class="cell-input" value="Data ${i+1}-${j+1}"/>`;}}
+  }
+  function changeTableSize(){
+    const r=parseInt(prompt('Rows:','3')),c=parseInt(prompt('Cols:','3'));
+    if(r>0&&c>0&&r<=20&&c<=10)createTable(r,c);else alert('Invalid');
+  }
+  function addRow(){
+    const t=document.getElementById('editableTable');const b=t.tBodies[0];const c=t.rows[0].cells.length;const r=b.insertRow();
+    for(let i=0;i<c;i++){const cell=r.insertCell();cell.innerHTML='<input type="text" class="cell-input" value="New Data"/>';}
+  }
+  function deleteRow(){const t=document.getElementById('editableTable');const b=t.tBodies[0];if(b.rows.length>1)b.deleteRow(-1);else alert('At least one row!');}
+  function addColumn(){
+    const t=document.getElementById('editableTable');const r=t.rows;
+    const th=document.createElement('th');th.innerHTML='<input type="text" class="cell-input" value="New Header"/>';r[0].appendChild(th);
+    for(let i=1;i<r.length;i++){const cell=r[i].insertCell();cell.innerHTML='<input type="text" class="cell-input" value="New Data"/>';}
+  }
+  function deleteColumn(){
+    const t=document.getElementById('editableTable');const r=t.rows;
+    if(r[0].cells.length>1){for(let i=0;i<r.length;i++)r[i].deleteCell(-1);}else alert('At least one column!');
+  }
+  function insertTableToPost(){
+    const t=document.getElementById('editableTable');const r=t.rows;
+    let tableHTML='\n<div style="overflow-x:auto;"><table>\n<thead><tr>';
+    for(let i=0;i<r[0].cells.length;i++){
+      const val=r[0].cells[i].querySelector('.cell-input').value;
+      tableHTML+=`<th>${val}</th>`;
     }
+    tableHTML+='</tr></thead><tbody>';
+    for(let i=1;i<r.length;i++){tableHTML+='<tr>';for(let j=0;j<r[i].cells.length;j++){const val=r[i].cells[j].querySelector('.cell-input').value;tableHTML+=`<td>${val}</td>`;}tableHTML+='</tr>';}
+    tableHTML+='</tbody></table></div>\n';
+    const ta=document.getElementById('content');const pos=ta.selectionStart;
+    ta.value=ta.value.substring(0,pos)+tableHTML+ta.value.substring(pos);
+    closeTableBuilder();showStatus('✅ Table inserted!','success');
+  }
 
-    function initializeGoogleSignIn() {
-        google.accounts.id.initialize({
-            client_id: CLIENT_ID,
-            callback: handleCredentialResponse
-        });
-    }
-
-    function signIn() {
-        const client = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            callback: (response) => {
-                if (response.access_token) {
-                    accessToken = response.access_token;
-                    onSignIn();
-                }
-            },
-        });
-        client.requestAccessToken();
-    }
-
-    function handleCredentialResponse(response) {
-        // ID token handler
-    }
-
-    async function onSignIn() {
-        document.getElementById('signedOut').classList.add('hidden');
-        document.getElementById('signedIn').classList.remove('hidden');
-        
-        await loadUserBlogs();
-        
-        document.getElementById('publishBtn').disabled = false;
-        document.getElementById('draftBtn').disabled = false;
-        
-        showStatus('✅ Successfully signed in! Select a blog to start publishing.', 'success');
-    }
-
-    async function loadUserBlogs() {
-        try {
-            const response = await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs', {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-            
-            const data = await response.json();
-            blogs = data.items || [];
-            
-            const blogSelect = document.getElementById('blogSelect');
-            blogSelect.innerHTML = '<option value="">Choose a blog...</option>';
-            
-            blogs.forEach(blog => {
-                const option = document.createElement('option');
-                option.value = blog.id;
-                option.textContent = blog.name;
-                blogSelect.appendChild(option);
-            });
-            
-            document.getElementById('userEmail').textContent = `${blogs.length} blog(s) loaded`;
-            document.getElementById('blogSelector').style.display = 'block';
-        } catch (error) {
-            showStatus('❌ Error loading blogs: ' + error.message, 'error');
-        }
-    }
-
-    function signOut() {
-        accessToken = null;
-        document.getElementById('signedOut').classList.remove('hidden');
-        document.getElementById('signedIn').classList.add('hidden');
-        document.getElementById('blogSelector').style.display = 'none';
-        document.getElementById('publishBtn').disabled = true;
-        document.getElementById('draftBtn').disabled = true;
-        showStatus('👋 Signed out successfully', 'info');
-    }
-
-    async function publishPost(isDraft) {
-        const title = document.getElementById('title').value.trim();
-        const content = document.getElementById('content').value.trim();
-        const blogId = document.getElementById('blogSelect').value;
-
-        if (!title || !content) {
-            showStatus('⚠️ Please enter both title and content', 'error');
-            return;
-        }
-
-        if (!blogId) {
-            showStatus('⚠️ Please select a blog', 'error');
-            return;
-        }
-
-        const post = {
-            kind: 'blogger#post',
-            blog: { id: blogId },
-            title: title,
-            content: formatContent(content)
-        };
-
-        try {
-            showStatus('⏳ Publishing your post...', 'info');
-            
-            const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`;
-            const response = await fetch(url + (isDraft ? '?isDraft=true' : ''), {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(post)
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                showStatus(`🎉 Post ${isDraft ? 'saved as draft' : 'published'} successfully! <a href="${result.url}" target="_blank">View Post</a>`, 'success');
-            } else {
-                const error = await response.json();
-                showStatus('❌ Error: ' + (error.error.message || 'Failed to publish'), 'error');
-            }
-        } catch (error) {
-            showStatus('❌ Error publishing post: ' + error.message, 'error');
-        }
-    }
-
-    function formatContent(text) {
-        let html = text;
-        
-        if (!html.includes('<table')) {
-            html = html.replace(/```\n([\s\S]+?)\n```/g, function(match, code) {
-                const escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                return '<pre style="background:#202124;color:#fff;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0"><code style="font-family:monospace;font-size:0.9em;line-height:1.6">' + escaped + '</code></pre>';
-            });
-            
-            html = html.replace(/`([^`]+)`/g, '<code style="background:#f1f3f4;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:0.9em">$1</code>');
-            html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<div style="text-align:center;margin:20px 0"><img src="$2" alt="$1" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>');
-            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#667eea;text-decoration:none;font-weight:500">$1</a>');
-            html = html.replace(/(^|\n)#### (.+)/g, '$1<h4 style="margin-top:24px;margin-bottom:12px;font-size:1.1em;color:#202124">$2</h4>');
-            html = html.replace(/(^|\n)### (.+)/g, '$1<h3 style="margin-top:28px;margin-bottom:14px;font-size:1.3em;color:#202124">$2</h3>');
-            html = html.replace(/(^|\n)## (.+)/g, '$1<h2 style="margin-top:32px;margin-bottom:16px;font-size:1.6em;color:#202124">$2</h2>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-            html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-            html = html.replace(/~~([^~]+)~~/g, '<s>$1</s>');
-            html = html.replace(/(^|\n)> (.+)/g, '$1<blockquote style="border-left:4px solid #667eea;padding:12px 20px;margin:20px 0;background:#f8f9fa;border-radius:4px;font-style:italic">$2</blockquote>');
-            html = html.replace(/(^|\n)---(\n|$)/g, '$1<hr style="border:none;border-top:2px solid #e8eaed;margin:32px 0">$2');
-            html = html.replace(/(^|\n)(\d+)\. (.+)/g, '$1<li style="margin:8px 0;line-height:1.6">$3</li>');
-            html = html.replace(/(^|\n)- (.+)/g, '$1<li style="margin:8px 0;line-height:1.6">$2</li>');
-            html = html.replace(/(<li[^>]*>.*?<\/li>\n?)+/g, function(match) {
-                return '<ul style="margin:16px 0;padding-left:24px">' + match + '</ul>';
-            });
-        }
-        
-        if (html.includes('<table')) {
-            html = html.replace(/<table([^>]*)>/g, '<div style="overflow-x:auto;margin:20px 0"><table$1 style="width:100%;border-collapse:collapse;min-width:300px">');
-            html = html.replace(/<\/table>/g, '</table></div>');
-        }
-        
-        html = html.replace(/\n\n+/g, '</p><p style="margin:16px 0;line-height:1.8;color:#3c4043">');
-        html = html.replace(/\n/g, '<br>');
-        html = '<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;font-size:16px;line-height:1.8"><p style="margin:16px 0;line-height:1.8;color:#3c4043">' + html + '</p></div>';
-        
-        return html;
-    }
-
-    function insertFormatting(before, after) {
-        const textarea = document.getElementById('content');
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const text = textarea.value;
-        const selectedText = text.substring(start, end);
-        
-        textarea.value = text.substring(0, start) + before + selectedText + after + text.substring(end);
-        
-        textarea.focus();
-        textarea.selectionStart = start + before.length;
-        textarea.selectionEnd = start + before.length + selectedText.length;
-    }
-
-    function insertLink() {
-        const url = prompt('Enter the URL:');
-        if (url) {
-            const text = prompt('Enter the link text:', 'Click here');
-            if (text) {
-                insertFormatting(`[${text}](`, `${url})`);
-            }
-        }
-    }
-
-    function insertImage() {
-        const url = prompt('Enter the image URL:');
-        if (url) {
-            const alt = prompt('Enter image description (alt text):', 'Image');
-            if (alt) {
-                insertFormatting(`\n![${alt}](`, `${url})\n`);
-            }
-        }
-    }
-
-    function openTableBuilder() {
-        document.getElementById('tableModal').classList.add('active');
-        createTable(3, 3); // Default 3x3 table
-    }
-
-    function closeTableBuilder() {
-        document.getElementById('tableModal').classList.remove('active');
-    }
-
-    function createTable(rows, cols) {
-        const table = document.getElementById('editableTable');
-        table.innerHTML = '';
-        
-        // Create header row
-        const thead = table.createTHead();
-        const headerRow = thead.insertRow();
-        for (let i = 0; i < cols; i++) {
-            const th = document.createElement('th');
-            th.innerHTML = `<input type="text" class="cell-input" value="Header ${i + 1}" />`;
-            headerRow.appendChild(th);
-        }
-        
-        // Create body rows
-        const tbody = table.createTBody();
-        for (let i = 0; i < rows; i++) {
-            const row = tbody.insertRow();
-            for (let j = 0; j < cols; j++) {
-                const cell = row.insertCell();
-                cell.innerHTML = `<input type="text" class="cell-input" value="Data ${i + 1}-${j + 1}" />`;
-            }
-        }
-        
-        currentTable = table;
-    }
-
-    function changeTableSize() {
-        const rows = parseInt(prompt('Number of rows:', '3'));
-        const cols = parseInt(prompt('Number of columns:', '3'));
-        
-        if (rows && cols && rows > 0 && cols > 0 && rows <= 20 && cols <= 10) {
-            createTable(rows, cols);
-        } else {
-            alert('Please enter valid numbers (rows: 1-20, columns: 1-10)');
-        }
-    }
-
-    function addRow() {
-        const table = document.getElementById('editableTable');
-        const tbody = table.tBodies[0];
-        const cols = table.rows[0].cells.length;
-        
-        const newRow = tbody.insertRow();
-        for (let i = 0; i < cols; i++) {
-            const cell = newRow.insertCell();
-            cell.innerHTML = `<input type="text" class="cell-input" value="New Data" />`;
-        }
-    }
-
-    function deleteRow() {
-        const table = document.getElementById('editableTable');
-        const tbody = table.tBodies[0];
-        
-        if (tbody.rows.length > 1) {
-            tbody.deleteRow(-1);
-        } else {
-            alert('Table must have at least one row!');
-        }
-    }
-
-    function addColumn() {
-        const table = document.getElementById('editableTable');
-        const rows = table.rows;
-        
-        // Add to header
-        const th = document.createElement('th');
-        th.innerHTML = `<input type="text" class="cell-input" value="New Header" />`;
-        rows[0].appendChild(th);
-        
-        // Add to body rows
-        for (let i = 1; i < rows.length; i++) {
-            const cell = rows[i].insertCell();
-            cell.innerHTML = `<input type="text" class="cell-input" value="New Data" />`;
-        }
-    }
-
-    function deleteColumn() {
-        const table = document.getElementById('editableTable');
-        const rows = table.rows;
-        
-        if (rows[0].cells.length > 1) {
-            for (let i = 0; i < rows.length; i++) {
-                rows[i].deleteCell(-1);
-            }
-        } else {
-            alert('Table must have at least one column!');
-        }
-    }
-
-    function insertTableToPost() {
-        const table = document.getElementById('editableTable');
-        const rows = table.rows;
-        
-        let tableHTML = '\n<table style="width:100%;border-collapse:collapse;margin:20px 0">\n';
-        
-        // Process header
-        tableHTML += '<thead><tr>';
-        for (let i = 0; i < rows[0].cells.length; i++) {
-            const input = rows[0].cells[i].querySelector('.cell-input');
-            const value = input ? input.value : 'Header';
-            tableHTML += `<th style="border:2px solid #667eea;padding:12px;background:#667eea;color:white;font-weight:600;text-align:left">${value}</th>`;
-        }
-        tableHTML += '</tr></thead>\n';
-        
-        // Process body rows
-        tableHTML += '<tbody>';
-        for (let i = 1; i < rows.length; i++) {
-            tableHTML += '<tr>';
-            for (let j = 0; j < rows[i].cells.length; j++) {
-                const input = rows[i].cells[j].querySelector('.cell-input');
-                const value = input ? input.value : '';
-                const bg = (i - 1) % 2 === 0 ? '#f8f9fa' : 'white';
-                tableHTML += `<td style="border:1px solid #e8eaed;padding:12px;background:${bg}">${value}</td>`;
-            }
-            tableHTML += '</tr>\n';
-        }
-        tableHTML += '</tbody>\n</table>\n';
-        
-        // Insert into textarea
-        const textarea = document.getElementById('content');
-        const pos = textarea.selectionStart;
-        textarea.value = textarea.value.substring(0, pos) + tableHTML + textarea.value.substring(pos);
-        
-        closeTableBuilder();
-        showStatus('✅ Table inserted! You can edit it anytime by clicking the Table button again.', 'success');
-    }
-
-    function clearEditor() {
-        if (confirm('⚠️ Are you sure you want to clear everything? This cannot be undone.')) {
-            document.getElementById('title').value = '';
-            document.getElementById('content').value = '';
-            showStatus('🗑️ Editor cleared', 'info');
-        }
-    }
-
-    function showStatus(message, type) {
-        const statusDiv = document.getElementById('statusMessage');
-        statusDiv.innerHTML = message;
-        statusDiv.className = `status ${type}`;
-        statusDiv.style.display = 'block';
-        
-        setTimeout(() => {
-            statusDiv.style.display = 'none';
-        }, 6000);
-    }
-
-    // Initialize
-    loadGoogleAPI();
+  function clearEditor(){
+    if(confirm('Clear everything?')){document.getElementById('title').value='';document.getElementById('content').value='';showStatus('🗑️ Cleared','info');}
+  }
+  function showStatus(m,t){
+    const d=document.getElementById('statusMessage');d.innerHTML=m;d.className='status '+t;d.style.display='block';setTimeout(()=>{d.style.display='none';},6000);
+  }
+  loadGoogleAPI();
   </script>
 </body>
 </html>
