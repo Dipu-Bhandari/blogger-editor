@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogger Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: #fff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #1a73e8;
+        }
+
+        .auth-section button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .auth-section button:hover {
+            background: #1557b0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-email {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .editor-panel, .preview-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+
+        #title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        #content {
+            min-height: 400px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button {
+            background: #f1f3f4;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .toolbar button:hover {
+            background: #e0e0e0;
+        }
+
+        .blog-selector {
+            margin-bottom: 20px;
+        }
+
+        .blog-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-publish {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .btn-publish:hover {
+            background: #1557b0;
+        }
+
+        .btn-draft {
+            background: #5f6368;
+            color: white;
+        }
+
+        .btn-draft:hover {
+            background: #4a4d51;
+        }
+
+        .btn-clear {
+            background: #f1f3f4;
+            color: #333;
+        }
+
+        .btn-clear:hover {
+            background: #e0e0e0;
+        }
+
+        .preview-content {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 4px;
+            min-height: 400px;
+            background: #fafafa;
+        }
+
+        .preview-content h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #202124;
+        }
+
+        .preview-content p {
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .status {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .status.success {
+            background: #e6f4ea;
+            color: #137333;
+            border: 1px solid #c8e6c9;
+        }
+
+        .status.error {
+            background: #fce8e6;
+            color: #c5221f;
+            border: 1px solid #f5c2c0;
+        }
+
+        .status.info {
+            background: #e8f0fe;
+            color: #1967d2;
+            border: 1px solid #d2e3fc;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📝 Blogger Editor</h1>
+        <div class="auth-section">
+            <div id="signedOut">
+                <button onclick="signIn()">Sign in with Google</button>
+            </div>
+            <div id="signedIn" class="user-info hidden">
+                <span class="user-email" id="userEmail"></span>
+                <button onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="editor-panel">
+            <h2 class="panel-title">✍️ Write Your Post</h2>
+            
+            <div id="statusMessage"></div>
+
+            <div class="blog-selector" id="blogSelector" style="display: none;">
+                <label for="blogSelect" style="display: block; margin-bottom: 8px; font-weight: 500;">Select Blog:</label>
+                <select id="blogSelect">
+                    <option value="">Choose a blog...</option>
+                </select>
+            </div>
+
+            <input type="text" id="title" placeholder="Post Title" />
+            
+            <div class="toolbar">
+                <button onclick="insertFormatting('**', '**')">Bold</button>
+                <button onclick="insertFormatting('*', '*')">Italic</button>
+                <button onclick="insertFormatting('[', '](url)')">Link</button>
+                <button onclick="insertFormatting('\n## ', '')">Heading</button>
+                <button onclick="insertFormatting('\n- ', '')">List</button>
+                <button onclick="insertFormatting('\n> ', '')">Quote</button>
+                <button onclick="insertFormatting('`', '`')">Code</button>
+            </div>
+            
+            <textarea id="content" placeholder="Write your post content here... You can use markdown-style formatting!"></textarea>
+
+            <div class="actions">
+                <button class="btn-publish" onclick="publishPost(false)" id="publishBtn" disabled>Publish Post</button>
+                <button class="btn-draft" onclick="publishPost(true)" id="draftBtn" disabled>Save as Draft</button>
+                <button class="btn-clear" onclick="clearEditor()">Clear</button>
+            </div>
+        </div>
+
+        <div class="preview-panel">
+            <h2 class="panel-title">👁️ Live Preview</h2>
+            <div class="preview-content">
+                <div id="preview">
+                    <h1 id="previewTitle">Your Title Here</h1>
+                    <div id="previewContent">Your content will appear here as you type...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CLIENT_ID = '942968999133-nuldtmg604hjfogobnpeaq55vhd0v4tr.apps.googleusercontent.com';
+        const SCOPES = 'https://www.googleapis.com/auth/blogger';
+        
+        let accessToken = null;
+        let blogs = [];
+
+        // Load Google API
+        function loadGoogleAPI() {
+            const script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.onload = initializeGoogleSignIn;
+            document.head.appendChild(script);
+        }
+
+        function initializeGoogleSignIn() {
+            google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCredentialResponse
+            });
+        }
+
+        function signIn() {
+            const client = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: (response) => {
+                    if (response.access_token) {
+                        accessToken = response.access_token;
+                        onSignIn();
+                    }
+                },
+            });
+            client.requestAccessToken();
+        }
+
+        function handleCredentialResponse(response) {
+            // This is for ID token, we need access token for API calls
+        }
+
+        async function onSignIn() {
+            document.getElementById('signedOut').classList.add('hidden');
+            document.getElementById('signedIn').classList.remove('hidden');
+            
+            await loadUserBlogs();
+            
+            document.getElementById('publishBtn').disabled = false;
+            document.getElementById('draftBtn').disabled = false;
+            
+            showStatus('Successfully signed in! Select a blog to start publishing.', 'success');
+        }
+
+        async function loadUserBlogs() {
+            try {
+                const response = await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                blogs = data.items || [];
+                
+                const blogSelect = document.getElementById('blogSelect');
+                blogSelect.innerHTML = '<option value="">Choose a blog...</option>';
+                
+                blogs.forEach(blog => {
+                    const option = document.createElement('option');
+                    option.value = blog.id;
+                    option.textContent = blog.name;
+                    blogSelect.appendChild(option);
+                });
+                
+                document.getElementById('userEmail').textContent = 'Blogs loaded';
+                document.getElementById('blogSelector').style.display = 'block';
+            } catch (error) {
+                showStatus('Error loading blogs: ' + error.message, 'error');
+            }
+        }
+
+        function signOut() {
+            accessToken = null;
+            document.getElementById('signedOut').classList.remove('hidden');
+            document.getElementById('signedIn').classList.add('hidden');
+            document.getElementById('blogSelector').style.display = 'none';
+            document.getElementById('publishBtn').disabled = true;
+            document.getElementById('draftBtn').disabled = true;
+            showStatus('Signed out successfully', 'info');
+        }
+
+        async function publishPost(isDraft) {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const blogId = document.getElementById('blogSelect').value;
+
+            if (!title || !content) {
+                showStatus('Please enter both title and content', 'error');
+                return;
+            }
+
+            if (!blogId) {
+                showStatus('Please select a blog', 'error');
+                return;
+            }
+
+            const post = {
+                kind: 'blogger#post',
+                blog: { id: blogId },
+                title: title,
+                content: formatContent(content)
+            };
+
+            try {
+                const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`;
+                const response = await fetch(url + (isDraft ? '?isDraft=true' : ''), {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(post)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showStatus(`Post ${isDraft ? 'saved as draft' : 'published'} successfully! <a href="${result.url}" target="_blank">View Post</a>`, 'success');
+                } else {
+                    const error = await response.json();
+                    showStatus('Error: ' + (error.error.message || 'Failed to publish'), 'error');
+                }
+            } catch (error) {
+                showStatus('Error publishing post: ' + error.message, 'error');
+            }
+        }
+
+        function formatContent(text) {
+            // Convert markdown-like formatting to HTML
+            let html = text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`(.+?)`/g, '<code>$1</code>')
+                .replace(/\n## (.+)/g, '\n<h2>$1</h2>')
+                .replace(/\n### (.+)/g, '\n<h3>$1</h3>')
+                .replace(/\n- (.+)/g, '\n<li>$1</li>')
+                .replace(/\n> (.+)/g, '\n<blockquote>$1</blockquote>')
+                .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
+            
+            return '<p>' + html + '</p>';
+        }
+
+        function insertFormatting(before, after) {
+            const textarea = document.getElementById('content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selectedText = text.substring(start, end);
+            
+            textarea.value = text.substring(0, start) + before + selectedText + after + text.substring(end);
+            
+            textarea.focus();
+            textarea.selectionStart = start + before.length;
+            textarea.selectionEnd = start + before.length + selectedText.length;
+            
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const title = document.getElementById('title').value || 'Your Title Here';
+            const content = document.getElementById('content').value || 'Your content will appear here as you type...';
+            
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewContent').innerHTML = formatContent(content);
+        }
+
+        function clearEditor() {
+            if (confirm('Are you sure you want to clear the editor?')) {
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                updatePreview();
+                showStatus('Editor cleared', 'info');
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.innerHTML = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Event listeners
+        document.getElementById('title').addEventListener('input', updatePreview);
+        document.getElementById('content').addEventListener('input', updatePreview);
+
+        // Initialize
+        loadGoogleAPI();
+    </script>
+</body>
+</html>
