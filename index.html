@@ -7,114 +7,71 @@
   <style>
     * {margin:0;padding:0;box-sizing:border-box}
     body {
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background:#f8f9fa;
       color:#202124;
     }
-
     .header {
-      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-      color:white;
-      padding:20px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.15);
-      position:sticky;
-      top:0;
-      z-index:100;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
     .header-content {
-      max-width:1400px;
-      margin:0 auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-      gap:15px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-
-    .header h1 {font-size:24px;font-weight:700}
+    .header h1 {font-size: 24px;font-weight:700;}
     .auth-section button {
-      background:rgba(255,255,255,0.2);
-      color:white;
-      border:2px solid white;
-      padding:10px 24px;
-      border-radius:25px;
-      cursor:pointer;
-      font-size:14px;
-      font-weight:600;
-      transition:all .3s;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 2px solid #fff;
+      padding: 10px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all .3s;
     }
     .auth-section button:hover {
-      background:white;
-      color:#667eea;
+      background: #fff;
+      color: #667eea;
     }
-
-    .user-info {display:flex;align-items:center;gap:15px}
-    .user-email {font-size:14px;opacity:.9}
-
-    .container {max-width:1400px;margin:0 auto;padding:20px}
+    .container {max-width: 1400px;margin: 0 auto;padding: 20px;}
     .editor-card {
-      background:white;
-      border-radius:12px;
-      padding:30px;
-      box-shadow:0 2px 16px rgba(0,0,0,0.08);
-      margin-bottom:20px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
     }
-
-    .section-title {
-      font-size:18px;
-      font-weight:600;
-      margin-bottom:20px;
-      color:#202124;
-      display:flex;
-      align-items:center;
-      gap:10px;
+    .section-title {font-size:18px;font-weight:600;margin-bottom:20px;color:#202124;}
+    input, select, textarea {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e8eaed;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all .3s;
+      background: #fff;
     }
-
-    .blog-selector {margin-bottom:20px}
-    .blog-selector label {
-      display:block;
-      margin-bottom:8px;
-      font-weight:500;
-      color:#5f6368;
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
     }
-
-    .blog-selector select,input[type="text"],textarea {
-      width:100%;
-      padding:14px;
-      border:2px solid #e8eaed;
-      border-radius:8px;
-      font-size:15px;
-      font-family:inherit;
-      transition:all .3s;
-      background:white;
-    }
-
-    .blog-selector select:focus,input[type="text"]:focus,textarea:focus {
-      outline:none;
-      border-color:#667eea;
-      box-shadow:0 0 0 3px rgba(102,126,234,0.1);
-    }
-
-    #title {font-size:28px;font-weight:600;margin-bottom:20px}
-    .toolbar {
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-bottom:20px;
-      padding:15px;
-      background:#f8f9fa;
-      border-radius:8px;
-      border:1px solid #e8eaed;
-    }
-
-    .toolbar-section {
-      display:flex;
-      gap:6px;
-      padding-right:10px;
-      border-right:1px solid #dadce0;
-    }
-    .toolbar-section:last-child {border-right:none}
+    #title {font-size: 28px;font-weight:600;margin-bottom:20px;}
+    .toolbar {display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;padding:15px;background:#f8f9fa;border-radius:8px;border:1px solid #e8eaed;}
+    .toolbar-section {display:flex;gap:6px;padding-right:10px;border-right:1px solid #dadce0;}
+    .toolbar-section:last-child{border-right:none;}
     .toolbar button {
       background:white;
       border:1px solid #dadce0;
@@ -125,24 +82,15 @@
       font-weight:500;
       transition:all .2s;
       color:#5f6368;
-      white-space:nowrap;
     }
     .toolbar button:hover {
       background:#667eea;
-      color:white;
+      color:#fff;
       border-color:#667eea;
       transform:translateY(-1px);
     }
-
-    #content {min-height:500px;resize:vertical;line-height:1.8;font-size:16px}
-
-    .actions {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-      gap:12px;
-      margin-top:25px;
-    }
-
+    #content {min-height:500px;resize:vertical;line-height:1.8;font-size:16px;}
+    .actions {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:25px;}
     .actions button {
       padding:14px 24px;
       border:none;
@@ -151,74 +99,25 @@
       font-size:15px;
       font-weight:600;
       transition:all .3s;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
     }
-
     .btn-publish {
-      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-      color:white;
-      box-shadow:0 4px 12px rgba(102,126,234,0.4);
+      background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(102,126,234,0.4);
     }
-    .btn-publish:hover {
-      transform:translateY(-2px);
-      box-shadow:0 6px 20px rgba(102,126,234,0.5);
-    }
-
-    .btn-draft {background:#5f6368;color:white}
-    .btn-draft:hover {background:#4a4d51;transform:translateY(-2px)}
-    .btn-clear {background:#f1f3f4;color:#5f6368}
-    .btn-clear:hover {background:#e8eaed}
-
-    .status {
-      padding:14px 18px;
-      border-radius:8px;
-      margin-bottom:20px;
-      font-size:14px;
-      font-weight:500;
-    }
-    .status.success{background:#e6f4ea;color:#137333;border-left:4px solid #34a853}
-    .status.error{background:#fce8e6;color:#c5221f;border-left:4px solid #ea4335}
-    .status.info{background:#e8f0fe;color:#1967d2;border-left:4px solid #4285f4}
-    .status a{color:inherit;font-weight:700;text-decoration:underline}
-
-    .hidden{display:none}
-    /* Modal styling (unchanged) */
-    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;overflow-y:auto;padding:20px}
-    .modal.active{display:flex}
-    .modal-content{background:white;padding:30px;border-radius:12px;max-width:95%;width:100%;max-height:90vh;overflow-y:auto}
-    .modal-header{font-size:20px;font-weight:600;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
-    .modal-close{background:#f1f3f4;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center}
-
-    .table-controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-    .table-controls button{padding:8px 16px;background:#667eea;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500}
-    .table-controls button:hover{background:#5568d3}
-    .table-editor{overflow-x:auto;margin-bottom:20px}
-    .editable-table{width:100%;border-collapse:collapse;background:white}
-    .editable-table th,.editable-table td{border:2px solid #667eea;padding:12px;min-width:120px}
-    .editable-table th{background:#667eea;color:white;font-weight:600}
-    .editable-table tr:nth-child(even) td{background:#f8f9fa}
-    .cell-input{width:100%;border:none;background:transparent;padding:4px;font-size:14px;font-family:inherit}
-    .cell-input:focus{outline:2px solid #667eea;background:#fff}
-    .table-actions{display:flex;gap:10px;margin-top:20px}
-    .table-actions button{flex:1;padding:12px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
-    .btn-insert{background:#667eea;color:white}
-    .btn-cancel{background:#e8eaed;color:#5f6368}
-
-    @media(max-width:768px){
-      .header h1{font-size:20px}
-      .editor-card{padding:20px}
-      #title{font-size:22px}
-      .toolbar button{padding:8px 12px;font-size:13px}
-      #content{min-height:400px;font-size:15px}
-      .actions{grid-template-columns:1fr}
-      .editable-table th,.editable-table td{min-width:80px;padding:8px;font-size:13px}
-    }
+    .btn-publish:hover {transform: translateY(-2px);}
+    .btn-draft {background:#5f6368;color:#fff;}
+    .btn-clear {background:#f1f3f4;color:#5f6368;}
+    .hidden{display:none;}
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;}
+    .modal.active{display:flex;}
+    .modal-content{background:#fff;padding:30px;border-radius:12px;max-width:90%;width:100%;max-height:90vh;overflow-y:auto;}
+    .editable-table{width:100%;border-collapse:collapse;}
+    .editable-table th,.editable-table td{border:2px solid #667eea;padding:8px;}
+    .editable-table th{background:#667eea;color:white;}
+    @media(max-width:768px){#title{font-size:22px}}
   </style>
 </head>
-
 <body>
   <div class="header">
     <div class="header-content">
@@ -226,7 +125,7 @@
       <div class="auth-section">
         <div id="signedOut"><button onclick="signIn()">Sign in with Google</button></div>
         <div id="signedIn" class="user-info hidden">
-          <span class="user-email" id="userEmail"></span>
+          <span id="userEmail"></span>
           <button onclick="signOut()">Sign Out</button>
         </div>
       </div>
@@ -236,85 +135,66 @@
   <div class="container">
     <div class="editor-card">
       <div id="statusMessage"></div>
-
-      <div class="blog-selector" id="blogSelector" style="display:none;">
-        <label for="blogSelect">📚 Select Your Blog:</label>
-        <select id="blogSelect"><option value="">Choose a blog...</option></select>
+      <div id="blogSelector" style="display:none;">
+        <label>Select Blog:</label>
+        <select id="blogSelect"></select>
       </div>
-
       <div class="section-title">📝 Post Details</div>
-      <input type="text" id="title" placeholder="Enter your post title here..." />
+      <input type="text" id="title" placeholder="Enter post title..." />
 
       <div class="toolbar">
         <div class="toolbar-section">
-          <button onclick="insertFormatting('**','**')"><strong>B</strong></button>
-          <button onclick="insertFormatting('*','*')"><em>I</em></button>
+          <button onclick="insertFormatting('**','**')"><b>B</b></button>
+          <button onclick="insertFormatting('*','*')"><i>I</i></button>
           <button onclick="insertFormatting('~~','~~')"><s>S</s></button>
           <button onclick="insertFormatting('`','`')">&lt;/&gt;</button>
         </div>
         <div class="toolbar-section">
-          <button onclick="insertFormatting('\n## ','')">H2</button>
-          <button onclick="insertFormatting('\n### ','')">H3</button>
-          <button onclick="insertFormatting('\n#### ','')">H4</button>
+          <button onclick="insertFormatting('\\n## ','')">H2</button>
+          <button onclick="insertFormatting('\\n### ','')">H3</button>
+          <button onclick="insertFormatting('\\n#### ','')">H4</button>
         </div>
         <div class="toolbar-section">
-          <button onclick="insertFormatting('\n- ','')">• List</button>
-          <button onclick="insertFormatting('\n1. ','')">1. List</button>
-          <button onclick="insertFormatting('\n> ','')">" Quote</button>
+          <button onclick="insertFormatting('\\n- ','')">List</button>
+          <button onclick="insertFormatting('\\n1. ','')">1.</button>
+          <button onclick="insertFormatting('\\n> ','')">Quote</button>
         </div>
         <div class="toolbar-section">
           <button onclick="insertLink()">🔗 Link</button>
           <button onclick="insertImage()">🖼️ Image</button>
           <button onclick="openTableBuilder()">📊 Table</button>
         </div>
-        <div class="toolbar-section">
-          <button onclick="insertFormatting('\n---\n','')">━━ Line</button>
-          <button onclick="insertFormatting('\n```\n','\n```\n')">Code Block</button>
-        </div>
       </div>
 
-      <textarea id="content" placeholder="Start writing your content..."></textarea>
+      <textarea id="content" placeholder="Start writing..."></textarea>
 
       <div class="actions">
-        <button class="btn-publish" onclick="publishPost(false)" id="publishBtn" disabled>🚀 Publish Post</button>
-        <button class="btn-draft" onclick="publishPost(true)" id="draftBtn" disabled>💾 Save as Draft</button>
-        <button class="btn-clear" onclick="clearEditor()">🗑️ Clear All</button>
+        <button class="btn-publish" onclick="publishPost(false)" id="publishBtn" disabled>🚀 Publish</button>
+        <button class="btn-draft" onclick="publishPost(true)" id="draftBtn" disabled>💾 Draft</button>
+        <button class="btn-clear" onclick="clearEditor()">🗑️ Clear</button>
       </div>
     </div>
   </div>
 
-  <!-- Table Modal -->
   <div class="modal" id="tableModal">
     <div class="modal-content">
-      <div class="modal-header"><span>📊 Create Interactive Table</span><button class="modal-close" onclick="closeTableBuilder()">×</button></div>
-      <div class="table-controls">
-        <button onclick="changeTableSize()">📏 Resize Table</button>
-        <button onclick="addRow()">➕ Add Row</button>
-        <button onclick="deleteRow()">➖ Delete Row</button>
-        <button onclick="addColumn()">➕ Add Column</button>
-        <button onclick="deleteColumn()">➖ Delete Column</button>
-      </div>
-      <div class="table-editor"><table class="editable-table" id="editableTable"></table></div>
-      <div class="table-actions">
-        <button class="btn-insert" onclick="insertTableToPost()">Insert Table</button>
-        <button class="btn-cancel" onclick="closeTableBuilder()">Cancel</button>
-      </div>
+      <h3>📊 Table Builder</h3>
+      <table id="editableTable" class="editable-table"></table>
+      <button onclick="insertTableToPost()">Insert</button>
+      <button onclick="closeTableBuilder()">Close</button>
     </div>
   </div>
 
   <script>
   const CLIENT_ID='942968999133-nuldtmg604hjfogobnpeaq55vhd0v4tr.apps.googleusercontent.com';
   const SCOPES='https://www.googleapis.com/auth/blogger';
-  let accessToken=null,blogs=[],currentTable=null;
+  let accessToken=null,blogs=[];
 
   function loadGoogleAPI(){
     const s=document.createElement('script');
     s.src='https://accounts.google.com/gsi/client';
-    s.onload=initializeGoogleSignIn;
+    s.onload=()=>google.accounts.id.initialize({client_id:CLIENT_ID});
     document.head.appendChild(s);
-  }
-  function initializeGoogleSignIn(){
-    google.accounts.id.initialize({client_id:CLIENT_ID,callback:handleCredentialResponse});
   }
   function signIn(){
     const c=google.accounts.oauth2.initTokenClient({
@@ -323,172 +203,78 @@
     });
     c.requestAccessToken();
   }
-  function handleCredentialResponse(){}
-  async function onSignIn(){
+  function onSignIn(){
     document.getElementById('signedOut').classList.add('hidden');
     document.getElementById('signedIn').classList.remove('hidden');
-    await loadUserBlogs();
+    loadBlogs();
     document.getElementById('publishBtn').disabled=false;
     document.getElementById('draftBtn').disabled=false;
-    showStatus('✅ Signed in successfully','success');
   }
-  async function loadUserBlogs(){
-    try{
-      const r=await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs',{headers:{'Authorization':`Bearer ${accessToken}`}});
-      const d=await r.json();blogs=d.items||[];
-      const sel=document.getElementById('blogSelect');
-      sel.innerHTML='<option value="">Choose a blog...</option>';
-      blogs.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;sel.appendChild(o);});
-      document.getElementById('userEmail').textContent=`${blogs.length} blog(s) loaded`;
-      document.getElementById('blogSelector').style.display='block';
-    }catch(e){showStatus('❌ Error loading blogs: '+e.message,'error');}
+  async function loadBlogs(){
+    const r=await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs',{headers:{Authorization:`Bearer ${accessToken}`}});
+    const d=await r.json();blogs=d.items||[];
+    const s=document.getElementById('blogSelect');
+    s.innerHTML=blogs.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+    document.getElementById('blogSelector').style.display='block';
   }
   function signOut(){
     accessToken=null;
     document.getElementById('signedOut').classList.remove('hidden');
     document.getElementById('signedIn').classList.add('hidden');
-    document.getElementById('blogSelector').style.display='none';
     document.getElementById('publishBtn').disabled=true;
     document.getElementById('draftBtn').disabled=true;
-    showStatus('👋 Signed out successfully','info');
+  }
+
+  function formatContent(text){
+    let html=text
+      .replace(/```\n([\s\S]+?)\n```/g,(m,c)=>`<pre><code>${c.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
+      .replace(/`([^`]+)`/g,'<code>$1</code>')
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<div><img src="$2" alt="$1" style="max-width:100%;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)"></div>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
+      .replace(/(^|\n)#### (.+)/g,'$1<h4>$2</h4>')
+      .replace(/(^|\n)### (.+)/g,'$1<h3>$2</h3>')
+      .replace(/(^|\n)## (.+)/g,'$1<h2>$2</h2>')
+      .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')
+      .replace(/\*([^*]+)\*/g,'<i>$1</i>')
+      .replace(/~~([^~]+)~~/g,'<s>$1</s>')
+      .replace(/(^|\n)> (.+)/g,'$1<blockquote>$2</blockquote>')
+      .replace(/(^|\n)---(\n|$)/g,'$1<hr>$2')
+      .replace(/(^|\n)(\d+)\. (.+)/g,'$1<li>$3</li>')
+      .replace(/(^|\n)- (.+)/g,'$1<li>$2</li>')
+      .replace(/(<li[^>]*>.*?<\/li>\n?)+/g,m=>`<ul>${m}</ul>`)
+      .replace(/\n\n+/g,'</p><p>')
+      .replace(/\n/g,'<br>');
+    return `<div style="font-size:16px;line-height:1.8;color:inherit;"><p>${html}</p></div>`;
   }
 
   async function publishPost(isDraft){
     const title=document.getElementById('title').value.trim();
     const content=document.getElementById('content').value.trim();
     const blogId=document.getElementById('blogSelect').value;
-    if(!title||!content){showStatus('⚠️ Please enter both title and content','error');return;}
-    if(!blogId){showStatus('⚠️ Please select a blog','error');return;}
-    const post={kind:'blogger#post',blog:{id:blogId},title:title,content:formatContent(content)};
-    try{
-      showStatus('⏳ Publishing...','info');
-      const url=`https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`;
-      const r=await fetch(url+(isDraft?'?isDraft=true':''),{
-        method:'POST',
-        headers:{'Authorization':`Bearer ${accessToken}`,'Content-Type':'application/json'},
-        body:JSON.stringify(post)
-      });
-      if(r.ok){
-        const res=await r.json();
-        showStatus(`🎉 Post ${isDraft?'saved as draft':'published'}! <a href="${res.url}" target="_blank">View</a>`,'success');
-      }else{
-        const e=await r.json();
-        showStatus('❌ Error: '+(e.error.message||'Failed'),'error');
-      }
-    }catch(e){showStatus('❌ Error: '+e.message,'error');}
+    if(!title||!content){alert("Enter title & content");return;}
+    const post={title,content:formatContent(content)};
+    const url=`https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${isDraft?'?isDraft=true':''}`;
+    const r=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify(post)});
+    if(r.ok){alert(isDraft?'Saved as draft!':'Published successfully!');}else alert("Error posting");
   }
 
-  // === Dark/Light theme adaptive formatter ===
-  function formatContent(text){
-    let html=text;
-    html=html
-      .replace(/```\n([\s\S]+?)\n```/g,(m,code)=>`<pre><code>${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
-      .replace(/`([^`]+)`/g,'<code>$1</code>')
-      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<div><img src="$2" alt="$1"></div>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
-      .replace(/(^|\n)#### (.+)/g,'$1<h4>$2</h4>')
-      .replace(/(^|\n)### (.+)/g,'$1<h3>$2</h3>')
-      .replace(/(^|\n)## (.+)/g,'$1<h2>$2</h2>')
-      .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-      .replace(/\*([^*]+)\*/g,'<em>$1</em>')
-      .replace(/~~([^~]+)~~/g,'<s>$1</s>')
-      .replace(/(^|\n)> (.+)/g,'$1<blockquote>$2</blockquote>')
-      .replace(/(^|\n)---(\n|$)/g,'$1<hr>$2')
-      .replace(/(^|\n)(\d+)\. (.+)/g,'$1<li>$3</li>')
-      .replace(/(^|\n)- (.+)/g,'$1<li>$2</li>')
-      .replace(/(<li[^>]*>.*?<\/li>\n?)+/g,m=>'<ul>'+m+'</ul>')
-      .replace(/\n\n+/g,'</p><p>')
-      .replace(/\n/g,'<br>');
-
-    const style=`
-<style>
-:root{
---post-bg:#fff;--post-text:#202124;--post-link:#4c6ef5;--post-border:#e8eaed;--post-code-bg:#f1f3f4;--post-quote-bg:#f8f9fa;
-}
-@media(prefers-color-scheme:dark){
-:root{
---post-bg:#181818;--post-text:#e8eaed;--post-link:#8ab4f8;--post-border:#333;--post-code-bg:#242526;--post-quote-bg:#202124;
-}}
-.post-content{background:var(--post-bg);color:var(--post-text);font-size:16px;line-height:1.8;word-wrap:break-word}
-.post-content a{color:var(--post-link);text-decoration:none;font-weight:500}
-.post-content a:hover{text-decoration:underline}
-.post-content blockquote{border-left:4px solid var(--post-link);padding:12px 20px;background:var(--post-quote-bg);border-radius:4px;font-style:italic}
-.post-content pre{background:var(--post-code-bg);color:var(--post-text);padding:16px;border-radius:8px;overflow-x:auto}
-.post-content code{background:var(--post-code-bg);color:var(--post-text);padding:2px 6px;border-radius:4px;font-family:monospace}
-.post-content table{width:100%;border-collapse:collapse;margin:20px 0;border:1px solid var(--post-border)}
-.post-content th{background:var(--post-link);color:#fff;padding:12px;text-align:left}
-.post-content td{background:var(--post-bg);color:var(--post-text);padding:12px;border:1px solid var(--post-border)}
-.post-content tr:nth-child(even) td{background:var(--post-quote-bg)}
-.post-content img{max-width:100%;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
-</style>`;
-
-    return `${style}<div class="post-content"><p>${html}</p></div>`;
+  function insertFormatting(b,a){
+    const t=document.getElementById('content');const s=t.selectionStart;const e=t.selectionEnd;
+    t.value=t.value.substring(0,s)+b+t.value.substring(s,e)+a+t.value.substring(e);
   }
+  function insertLink(){const u=prompt("URL:");const t=prompt("Text:");if(u&&t)insertFormatting(`[${t}](`,`${u})`);}
+  function insertImage(){const u=prompt("Image URL:");const a=prompt("Alt text:","Image");if(u)insertFormatting(`![${a}](`,`${u})`);}
 
-  // === utility functions ===
-  function insertFormatting(before,after){
-    const t=document.getElementById('content');
-    const s=t.selectionStart,e=t.selectionEnd,txt=t.value;
-    const sel=txt.substring(s,e);
-    t.value=txt.substring(0,s)+before+sel+after+txt.substring(e);
-    t.focus();t.selectionStart=s+before.length;t.selectionEnd=s+before.length+sel.length;
-  }
-  function insertLink(){
-    const url=prompt('Enter URL:');if(url){const text=prompt('Enter link text:','Click here');if(text)insertFormatting(`[${text}](`,`${url})`);}
-  }
-  function insertImage(){
-    const url=prompt('Enter image URL:');if(url){const alt=prompt('Alt text:','Image');if(alt)insertFormatting(`\n![${alt}](`,`${url})\n`);}
-  }
-
-  // table functions (unchanged)
   function openTableBuilder(){document.getElementById('tableModal').classList.add('active');createTable(3,3);}
   function closeTableBuilder(){document.getElementById('tableModal').classList.remove('active');}
-  function createTable(r,c){
-    const t=document.getElementById('editableTable');t.innerHTML='';
-    const h=t.createTHead(),hr=h.insertRow();
-    for(let i=0;i<c;i++){const th=document.createElement('th');th.innerHTML=`<input type="text" class="cell-input" value="Header ${i+1}"/>`;hr.appendChild(th);}
-    const b=t.createTBody();
-    for(let i=0;i<r;i++){const row=b.insertRow();for(let j=0;j<c;j++){const cell=row.insertCell();cell.innerHTML=`<input type="text" class="cell-input" value="Data ${i+1}-${j+1}"/>`;}}
-  }
-  function changeTableSize(){
-    const r=parseInt(prompt('Rows:','3')),c=parseInt(prompt('Cols:','3'));
-    if(r>0&&c>0&&r<=20&&c<=10)createTable(r,c);else alert('Invalid');
-  }
-  function addRow(){
-    const t=document.getElementById('editableTable');const b=t.tBodies[0];const c=t.rows[0].cells.length;const r=b.insertRow();
-    for(let i=0;i<c;i++){const cell=r.insertCell();cell.innerHTML='<input type="text" class="cell-input" value="New Data"/>';}
-  }
-  function deleteRow(){const t=document.getElementById('editableTable');const b=t.tBodies[0];if(b.rows.length>1)b.deleteRow(-1);else alert('At least one row!');}
-  function addColumn(){
-    const t=document.getElementById('editableTable');const r=t.rows;
-    const th=document.createElement('th');th.innerHTML='<input type="text" class="cell-input" value="New Header"/>';r[0].appendChild(th);
-    for(let i=1;i<r.length;i++){const cell=r[i].insertCell();cell.innerHTML='<input type="text" class="cell-input" value="New Data"/>';}
-  }
-  function deleteColumn(){
-    const t=document.getElementById('editableTable');const r=t.rows;
-    if(r[0].cells.length>1){for(let i=0;i<r.length;i++)r[i].deleteCell(-1);}else alert('At least one column!');
-  }
+  function createTable(r,c){const t=document.getElementById('editableTable');t.innerHTML='';for(let i=0;i<r;i++){const row=t.insertRow();for(let j=0;j<c;j++){row.insertCell().textContent=`${i==0?'Header':'Data'} ${i+1}-${j+1}`;}}}
   function insertTableToPost(){
-    const t=document.getElementById('editableTable');const r=t.rows;
-    let tableHTML='\n<div style="overflow-x:auto;"><table>\n<thead><tr>';
-    for(let i=0;i<r[0].cells.length;i++){
-      const val=r[0].cells[i].querySelector('.cell-input').value;
-      tableHTML+=`<th>${val}</th>`;
-    }
-    tableHTML+='</tr></thead><tbody>';
-    for(let i=1;i<r.length;i++){tableHTML+='<tr>';for(let j=0;j<r[i].cells.length;j++){const val=r[i].cells[j].querySelector('.cell-input').value;tableHTML+=`<td>${val}</td>`;}tableHTML+='</tr>';}
-    tableHTML+='</tbody></table></div>\n';
-    const ta=document.getElementById('content');const pos=ta.selectionStart;
-    ta.value=ta.value.substring(0,pos)+tableHTML+ta.value.substring(pos);
-    closeTableBuilder();showStatus('✅ Table inserted!','success');
+    const t=document.getElementById('editableTable');let h='<table>';
+    for(let r of t.rows){h+='<tr>';for(let c of r.cells){h+=`<td>${c.textContent}</td>`;}h+='</tr>';}
+    h+='</table>';const a=document.getElementById('content');a.value+=h;closeTableBuilder();
   }
 
-  function clearEditor(){
-    if(confirm('Clear everything?')){document.getElementById('title').value='';document.getElementById('content').value='';showStatus('🗑️ Cleared','info');}
-  }
-  function showStatus(m,t){
-    const d=document.getElementById('statusMessage');d.innerHTML=m;d.className='status '+t;d.style.display='block';setTimeout(()=>{d.style.display='none';},6000);
-  }
+  function clearEditor(){if(confirm("Clear?")){document.getElementById('title').value='';document.getElementById('content').value='';}}
   loadGoogleAPI();
   </script>
 </body>
