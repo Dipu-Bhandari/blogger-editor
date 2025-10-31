@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogger Editor</title>
+    <title>Blogger Editor Pro</title>
     <style>
         * {
             margin: 0;
@@ -13,40 +13,50 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: #f8f9fa;
+            color: #202124;
         }
 
         .header {
-            background: #fff;
-            padding: 15px 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
         .header h1 {
             font-size: 24px;
-            color: #1a73e8;
+            font-weight: 700;
         }
 
         .auth-section button {
-            background: #1a73e8;
+            background: rgba(255,255,255,0.2);
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            border: 2px solid white;
+            padding: 10px 24px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
         .auth-section button:hover {
-            background: #1557b0;
+            background: white;
+            color: #667eea;
         }
 
         .user-info {
@@ -57,117 +67,150 @@
 
         .user-email {
             font-size: 14px;
-            color: #666;
+            opacity: 0.9;
         }
 
         .container {
             max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .editor-panel, .preview-panel {
+        .editor-card {
             background: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
         }
 
-        .panel-title {
+        .section-title {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #333;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: inherit;
-            margin-bottom: 15px;
-        }
-
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #1a73e8;
-        }
-
-        #title {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        #content {
-            min-height: 400px;
-            resize: vertical;
-            line-height: 1.6;
-        }
-
-        .toolbar {
+            color: #202124;
             display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .toolbar button {
-            background: #f1f3f4;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-
-        .toolbar button:hover {
-            background: #e0e0e0;
+            align-items: center;
+            gap: 10px;
         }
 
         .blog-selector {
             margin-bottom: 20px;
         }
 
-        .blog-selector select {
+        .blog-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+
+        .blog-selector select, input[type="text"], textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 14px;
+            border: 2px solid #e8eaed;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
             background: white;
         }
 
-        .actions {
+        .blog-selector select:focus, input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .toolbar {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e8eaed;
+        }
+
+        .toolbar-section {
+            display: flex;
+            gap: 6px;
+            padding-right: 10px;
+            border-right: 1px solid #dadce0;
+        }
+
+        .toolbar-section:last-child {
+            border-right: none;
+        }
+
+        .toolbar button {
+            background: white;
+            border: 1px solid #dadce0;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #5f6368;
+            white-space: nowrap;
+        }
+
+        .toolbar button:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .toolbar button:active {
+            transform: translateY(0);
+        }
+
+        #content {
+            min-height: 500px;
+            resize: vertical;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
         }
 
         .actions button {
-            flex: 1;
-            padding: 12px;
+            padding: 14px 24px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-publish {
-            background: #1a73e8;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .btn-publish:hover {
-            background: #1557b0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         .btn-draft {
@@ -177,127 +220,341 @@
 
         .btn-draft:hover {
             background: #4a4d51;
+            transform: translateY(-2px);
         }
 
         .btn-clear {
             background: #f1f3f4;
-            color: #333;
+            color: #5f6368;
         }
 
         .btn-clear:hover {
-            background: #e0e0e0;
-        }
-
-        .preview-content {
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            border-radius: 4px;
-            min-height: 400px;
-            background: #fafafa;
-        }
-
-        .preview-content h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #202124;
-        }
-
-        .preview-content p {
-            line-height: 1.8;
-            margin-bottom: 16px;
+            background: #e8eaed;
         }
 
         .status {
-            padding: 10px 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             font-size: 14px;
+            font-weight: 500;
         }
 
         .status.success {
             background: #e6f4ea;
             color: #137333;
-            border: 1px solid #c8e6c9;
+            border-left: 4px solid #34a853;
         }
 
         .status.error {
             background: #fce8e6;
             color: #c5221f;
-            border: 1px solid #f5c2c0;
+            border-left: 4px solid #ea4335;
         }
 
         .status.info {
             background: #e8f0fe;
             color: #1967d2;
-            border: 1px solid #d2e3fc;
+            border-left: 4px solid #4285f4;
+        }
+
+        .status a {
+            color: inherit;
+            font-weight: 700;
+            text-decoration: underline;
         }
 
         .hidden {
             display: none;
         }
 
-        @media (max-width: 1024px) {
+        /* Table Builder Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            margin-bottom: 15px;
+        }
+
+        .modal-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+
+        .modal-input input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e8eaed;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-modal-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-modal-secondary {
+            background: #e8eaed;
+            color: #5f6368;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
             .container {
+                padding: 15px;
+            }
+
+            .editor-card {
+                padding: 20px;
+            }
+
+            #title {
+                font-size: 22px;
+            }
+
+            .toolbar {
+                padding: 12px;
+            }
+
+            .toolbar button {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .toolbar-section {
+                border-right: none;
+                padding-right: 0;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            #content {
+                min-height: 400px;
+                font-size: 15px;
+            }
+
+            .actions {
                 grid-template-columns: 1fr;
             }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .toolbar button {
+                flex: 1;
+                min-width: 70px;
+            }
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            background: #202124;
+            color: white;
+            font-size: 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📝 Blogger Editor</h1>
-        <div class="auth-section">
-            <div id="signedOut">
-                <button onclick="signIn()">Sign in with Google</button>
-            </div>
-            <div id="signedIn" class="user-info hidden">
-                <span class="user-email" id="userEmail"></span>
-                <button onclick="signOut()">Sign Out</button>
+        <div class="header-content">
+            <h1>✍️ Blogger Editor Pro</h1>
+            <div class="auth-section">
+                <div id="signedOut">
+                    <button onclick="signIn()">Sign in with Google</button>
+                </div>
+                <div id="signedIn" class="user-info hidden">
+                    <span class="user-email" id="userEmail"></span>
+                    <button onclick="signOut()">Sign Out</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="editor-panel">
-            <h2 class="panel-title">✍️ Write Your Post</h2>
-            
+        <div class="editor-card">
             <div id="statusMessage"></div>
 
             <div class="blog-selector" id="blogSelector" style="display: none;">
-                <label for="blogSelect" style="display: block; margin-bottom: 8px; font-weight: 500;">Select Blog:</label>
+                <label for="blogSelect">📚 Select Your Blog:</label>
                 <select id="blogSelect">
                     <option value="">Choose a blog...</option>
                 </select>
             </div>
 
-            <input type="text" id="title" placeholder="Post Title" />
+            <div class="section-title">📝 Post Details</div>
+            <input type="text" id="title" placeholder="Enter your post title here..." />
             
             <div class="toolbar">
-                <button onclick="insertFormatting('**', '**')">Bold</button>
-                <button onclick="insertFormatting('*', '*')">Italic</button>
-                <button onclick="insertFormatting('[', '](url)')">Link</button>
-                <button onclick="insertFormatting('\n## ', '')">Heading</button>
-                <button onclick="insertFormatting('\n- ', '')">List</button>
-                <button onclick="insertFormatting('\n> ', '')">Quote</button>
-                <button onclick="insertFormatting('`', '`')">Code</button>
+                <div class="toolbar-section">
+                    <button onclick="insertFormatting('**', '**')" data-tooltip="Bold">
+                        <strong>B</strong>
+                    </button>
+                    <button onclick="insertFormatting('*', '*')" data-tooltip="Italic">
+                        <em>I</em>
+                    </button>
+                    <button onclick="insertFormatting('~~', '~~')" data-tooltip="Strikethrough">
+                        <s>S</s>
+                    </button>
+                    <button onclick="insertFormatting('`', '`')" data-tooltip="Inline Code">
+                        &lt;/&gt;
+                    </button>
+                </div>
+                
+                <div class="toolbar-section">
+                    <button onclick="insertFormatting('\n## ', '')" data-tooltip="Heading 2">
+                        H2
+                    </button>
+                    <button onclick="insertFormatting('\n### ', '')" data-tooltip="Heading 3">
+                        H3
+                    </button>
+                    <button onclick="insertFormatting('\n#### ', '')" data-tooltip="Heading 4">
+                        H4
+                    </button>
+                </div>
+                
+                <div class="toolbar-section">
+                    <button onclick="insertFormatting('\n- ', '')" data-tooltip="Bullet List">
+                        • List
+                    </button>
+                    <button onclick="insertFormatting('\n1. ', '')" data-tooltip="Numbered List">
+                        1. List
+                    </button>
+                    <button onclick="insertFormatting('\n> ', '')" data-tooltip="Quote">
+                        " Quote
+                    </button>
+                </div>
+                
+                <div class="toolbar-section">
+                    <button onclick="insertLink()" data-tooltip="Insert Link">
+                        🔗 Link
+                    </button>
+                    <button onclick="insertImage()" data-tooltip="Insert Image">
+                        🖼️ Image
+                    </button>
+                    <button onclick="openTableBuilder()" data-tooltip="Insert Table">
+                        📊 Table
+                    </button>
+                </div>
+                
+                <div class="toolbar-section">
+                    <button onclick="insertFormatting('\n---\n', '')" data-tooltip="Horizontal Line">
+                        ━━ Line
+                    </button>
+                    <button onclick="insertFormatting('\n```\n', '\n```\n')" data-tooltip="Code Block">
+                        Code Block
+                    </button>
+                </div>
             </div>
             
-            <textarea id="content" placeholder="Write your post content here... You can use markdown-style formatting!"></textarea>
+            <textarea id="content" placeholder="Start writing your amazing content here...
+
+Tips:
+• Use **bold** or *italic* for emphasis
+• Add links with [text](url)
+• Insert images with ![alt](image-url)
+• Create headings with ## Heading
+• Add lists with - or 1.
+• Use the toolbar buttons for quick formatting!"></textarea>
 
             <div class="actions">
-                <button class="btn-publish" onclick="publishPost(false)" id="publishBtn" disabled>Publish Post</button>
-                <button class="btn-draft" onclick="publishPost(true)" id="draftBtn" disabled>Save as Draft</button>
-                <button class="btn-clear" onclick="clearEditor()">Clear</button>
+                <button class="btn-publish" onclick="publishPost(false)" id="publishBtn" disabled>
+                    🚀 Publish Post
+                </button>
+                <button class="btn-draft" onclick="publishPost(true)" id="draftBtn" disabled>
+                    💾 Save as Draft
+                </button>
+                <button class="btn-clear" onclick="clearEditor()">
+                    🗑️ Clear All
+                </button>
             </div>
         </div>
+    </div>
 
-        <div class="preview-panel">
-            <h2 class="panel-title">👁️ Live Preview</h2>
-            <div class="preview-content">
-                <div id="preview">
-                    <h1 id="previewTitle">Your Title Here</h1>
-                    <div id="previewContent">Your content will appear here as you type...</div>
-                </div>
+    <!-- Table Builder Modal -->
+    <div class="modal" id="tableModal">
+        <div class="modal-content">
+            <div class="modal-header">📊 Create Responsive Table</div>
+            <div class="modal-input">
+                <label>Number of Rows:</label>
+                <input type="number" id="tableRows" min="2" max="20" value="3">
+            </div>
+            <div class="modal-input">
+                <label>Number of Columns:</label>
+                <input type="number" id="tableCols" min="2" max="10" value="3">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal-primary" onclick="insertTable()">Insert Table</button>
+                <button class="btn-modal-secondary" onclick="closeTableBuilder()">Cancel</button>
             </div>
         </div>
     </div>
@@ -309,7 +566,6 @@
         let accessToken = null;
         let blogs = [];
 
-        // Load Google API
         function loadGoogleAPI() {
             const script = document.createElement('script');
             script.src = 'https://accounts.google.com/gsi/client';
@@ -339,7 +595,7 @@
         }
 
         function handleCredentialResponse(response) {
-            // This is for ID token, we need access token for API calls
+            // ID token handler
         }
 
         async function onSignIn() {
@@ -351,7 +607,7 @@
             document.getElementById('publishBtn').disabled = false;
             document.getElementById('draftBtn').disabled = false;
             
-            showStatus('Successfully signed in! Select a blog to start publishing.', 'success');
+            showStatus('✅ Successfully signed in! Select a blog to start publishing.', 'success');
         }
 
         async function loadUserBlogs() {
@@ -375,10 +631,10 @@
                     blogSelect.appendChild(option);
                 });
                 
-                document.getElementById('userEmail').textContent = 'Blogs loaded';
+                document.getElementById('userEmail').textContent = `${blogs.length} blog(s) loaded`;
                 document.getElementById('blogSelector').style.display = 'block';
             } catch (error) {
-                showStatus('Error loading blogs: ' + error.message, 'error');
+                showStatus('❌ Error loading blogs: ' + error.message, 'error');
             }
         }
 
@@ -389,21 +645,21 @@
             document.getElementById('blogSelector').style.display = 'none';
             document.getElementById('publishBtn').disabled = true;
             document.getElementById('draftBtn').disabled = true;
-            showStatus('Signed out successfully', 'info');
+            showStatus('👋 Signed out successfully', 'info');
         }
 
         async function publishPost(isDraft) {
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
             const blogId = document.getElementById('blogSelect').value;
 
             if (!title || !content) {
-                showStatus('Please enter both title and content', 'error');
+                showStatus('⚠️ Please enter both title and content', 'error');
                 return;
             }
 
             if (!blogId) {
-                showStatus('Please select a blog', 'error');
+                showStatus('⚠️ Please select a blog', 'error');
                 return;
             }
 
@@ -415,6 +671,8 @@
             };
 
             try {
+                showStatus('⏳ Publishing your post...', 'info');
+                
                 const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`;
                 const response = await fetch(url + (isDraft ? '?isDraft=true' : ''), {
                     method: 'POST',
@@ -427,31 +685,69 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    showStatus(`Post ${isDraft ? 'saved as draft' : 'published'} successfully! <a href="${result.url}" target="_blank">View Post</a>`, 'success');
+                    showStatus(`🎉 Post ${isDraft ? 'saved as draft' : 'published'} successfully! <a href="${result.url}" target="_blank">View Post</a>`, 'success');
                 } else {
                     const error = await response.json();
-                    showStatus('Error: ' + (error.error.message || 'Failed to publish'), 'error');
+                    showStatus('❌ Error: ' + (error.error.message || 'Failed to publish'), 'error');
                 }
             } catch (error) {
-                showStatus('Error publishing post: ' + error.message, 'error');
+                showStatus('❌ Error publishing post: ' + error.message, 'error');
             }
         }
 
         function formatContent(text) {
-            // Convert markdown-like formatting to HTML
-            let html = text
-                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.+?)\*/g, '<em>$1</em>')
-                .replace(/`(.+?)`/g, '<code>$1</code>')
-                .replace(/\n## (.+)/g, '\n<h2>$1</h2>')
-                .replace(/\n### (.+)/g, '\n<h3>$1</h3>')
-                .replace(/\n- (.+)/g, '\n<li>$1</li>')
-                .replace(/\n> (.+)/g, '\n<blockquote>$1</blockquote>')
-                .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>');
+            // Responsive image wrapper
+            let html = text;
             
-            return '<p>' + html + '</p>';
+            // Convert images to responsive format
+            html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, 
+                '<div style="text-align:center;margin:20px 0"><img src="$2" alt="$1" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>');
+            
+            // Convert links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#667eea;text-decoration:none;font-weight:500">$1</a>');
+            
+            // Bold
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            
+            // Italic
+            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            
+            // Strikethrough
+            html = html.replace(/~~(.+?)~~/g, '<s>$1</s>');
+            
+            // Inline code
+            html = html.replace(/`(.+?)`/g, '<code style="background:#f1f3f4;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:0.9em">$1</code>');
+            
+            // Headings
+            html = html.replace(/\n#### (.+)/g, '\n<h4 style="margin-top:24px;margin-bottom:12px;font-size:1.1em;color:#202124">$1</h4>');
+            html = html.replace(/\n### (.+)/g, '\n<h3 style="margin-top:28px;margin-bottom:14px;font-size:1.3em;color:#202124">$1</h3>');
+            html = html.replace(/\n## (.+)/g, '\n<h2 style="margin-top:32px;margin-bottom:16px;font-size:1.6em;color:#202124">$1</h2>');
+            
+            // Lists
+            html = html.replace(/\n- (.+)/g, '\n<li style="margin:8px 0;line-height:1.6">$1</li>');
+            html = html.replace(/\n\d+\. (.+)/g, '\n<li style="margin:8px 0;line-height:1.6">$1</li>');
+            html = html.replace(/(<li[^>]*>.*<\/li>\n)+/g, '<ul style="margin:16px 0;padding-left:24px">$&</ul>');
+            
+            // Blockquotes
+            html = html.replace(/\n> (.+)/g, '\n<blockquote style="border-left:4px solid #667eea;padding:12px 20px;margin:20px 0;background:#f8f9fa;border-radius:4px;font-style:italic">$1</blockquote>');
+            
+            // Code blocks
+            html = html.replace(/```\n([\s\S]+?)\n```/g, '<pre style="background:#202124;color:#fff;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0"><code style="font-family:monospace;font-size:0.9em;line-height:1.6">$1</code></pre>');
+            
+            // Horizontal line
+            html = html.replace(/\n---\n/g, '\n<hr style="border:none;border-top:2px solid #e8eaed;margin:32px 0">\n');
+            
+            // Paragraphs
+            html = html.replace(/\n\n/g, '</p><p style="margin:16px 0;line-height:1.8;color:#3c4043">');
+            
+            // Wrap in responsive container
+            html = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word"><p style="margin:16px 0;line-height:1.8;color:#3c4043">${html}</p></div>`;
+            
+            // Add responsive meta for tables
+            html = html.replace(/<table>/g, '<div style="overflow-x:auto;margin:20px 0"><table style="width:100%;border-collapse:collapse;min-width:300px">');
+            html = html.replace(/<\/table>/g, '</table></div>');
+            
+            return html;
         }
 
         function insertFormatting(before, after) {
@@ -466,24 +762,74 @@
             textarea.focus();
             textarea.selectionStart = start + before.length;
             textarea.selectionEnd = start + before.length + selectedText.length;
-            
-            updatePreview();
         }
 
-        function updatePreview() {
-            const title = document.getElementById('title').value || 'Your Title Here';
-            const content = document.getElementById('content').value || 'Your content will appear here as you type...';
+        function insertLink() {
+            const url = prompt('Enter the URL:');
+            if (url) {
+                const text = prompt('Enter the link text:', 'Click here');
+                if (text) {
+                    insertFormatting(`[${text}](`, `${url})`);
+                }
+            }
+        }
+
+        function insertImage() {
+            const url = prompt('Enter the image URL:');
+            if (url) {
+                const alt = prompt('Enter image description (alt text):', 'Image');
+                if (alt) {
+                    insertFormatting(`\n![${alt}](`, `${url})\n`);
+                }
+            }
+        }
+
+        function openTableBuilder() {
+            document.getElementById('tableModal').classList.add('active');
+        }
+
+        function closeTableBuilder() {
+            document.getElementById('tableModal').classList.remove('active');
+        }
+
+        function insertTable() {
+            const rows = parseInt(document.getElementById('tableRows').value);
+            const cols = parseInt(document.getElementById('tableCols').value);
             
-            document.getElementById('previewTitle').textContent = title;
-            document.getElementById('previewContent').innerHTML = formatContent(content);
+            let table = '\n<table style="width:100%;border-collapse:collapse;margin:20px 0">\n';
+            
+            // Header row
+            table += '<thead><tr>';
+            for (let i = 0; i < cols; i++) {
+                table += `<th style="border:2px solid #667eea;padding:12px;background:#667eea;color:white;font-weight:600;text-align:left">Header ${i + 1}</th>`;
+            }
+            table += '</tr></thead>\n';
+            
+            // Body rows
+            table += '<tbody>';
+            for (let i = 0; i < rows - 1; i++) {
+                table += '<tr>';
+                for (let j = 0; j < cols; j++) {
+                    const bg = i % 2 === 0 ? '#f8f9fa' : 'white';
+                    table += `<td style="border:1px solid #e8eaed;padding:12px;background:${bg}">Data ${i + 1}-${j + 1}</td>`;
+                }
+                table += '</tr>\n';
+            }
+            table += '</tbody>\n</table>\n';
+            
+            const textarea = document.getElementById('content');
+            const pos = textarea.selectionStart;
+            textarea.value = textarea.value.substring(0, pos) + table + textarea.value.substring(pos);
+            
+            closeTableBuilder();
+            showStatus('✅ Table inserted! Edit the content directly in the editor.', 'success');
         }
 
         function clearEditor() {
-            if (confirm('Are you sure you want to clear the editor?')) {
+            if (confirm('⚠️ Are you sure you want to clear everything? This cannot be undone.')) {
                 document.getElementById('title').value = '';
                 document.getElementById('content').value = '';
-                updatePreview();
-                showStatus('Editor cleared', 'info');
+                showStatus('🗑️ Editor cleared', 'info');
             }
         }
 
@@ -495,12 +841,8 @@
             
             setTimeout(() => {
                 statusDiv.style.display = 'none';
-            }, 5000);
+            }, 6000);
         }
-
-        // Event listeners
-        document.getElementById('title').addEventListener('input', updatePreview);
-        document.getElementById('content').addEventListener('input', updatePreview);
 
         // Initialize
         loadGoogleAPI();
