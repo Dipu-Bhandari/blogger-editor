@@ -696,56 +696,73 @@ Tips:
         }
 
         function formatContent(text) {
-            // Responsive image wrapper
+            // Escape any existing HTML first to prevent conflicts
             let html = text;
             
-            // Convert images to responsive format
-            html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, 
-                '<div style="text-align:center;margin:20px 0"><img src="$2" alt="$1" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>');
+            // If text already contains HTML table tags, don't process it further
+            if (!html.includes('<table')) {
+                // Code blocks (process first to protect code content)
+                html = html.replace(/```\n([\s\S]+?)\n```/g, function(match, code) {
+                    const escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return '<pre style="background:#202124;color:#fff;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0"><code style="font-family:monospace;font-size:0.9em;line-height:1.6">' + escaped + '</code></pre>';
+                });
+                
+                // Inline code (protect from further processing)
+                html = html.replace(/`([^`]+)`/g, '<code style="background:#f1f3f4;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:0.9em">$1</code>');
+                
+                // Images (with responsive wrapper)
+                html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, 
+                    '<div style="text-align:center;margin:20px 0"><img src="$2" alt="$1" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>');
+                
+                // Links
+                html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#667eea;text-decoration:none;font-weight:500">$1</a>');
+                
+                // Headings (must be at start of line)
+                html = html.replace(/(^|\n)#### (.+)/g, '$1<h4 style="margin-top:24px;margin-bottom:12px;font-size:1.1em;color:#202124">$2</h4>');
+                html = html.replace(/(^|\n)### (.+)/g, '$1<h3 style="margin-top:28px;margin-bottom:14px;font-size:1.3em;color:#202124">$2</h3>');
+                html = html.replace(/(^|\n)## (.+)/g, '$1<h2 style="margin-top:32px;margin-bottom:16px;font-size:1.6em;color:#202124">$2</h2>');
+                
+                // Bold
+                html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+                
+                // Italic (after bold to avoid conflicts)
+                html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+                
+                // Strikethrough
+                html = html.replace(/~~([^~]+)~~/g, '<s>$1</s>');
+                
+                // Blockquotes
+                html = html.replace(/(^|\n)> (.+)/g, '$1<blockquote style="border-left:4px solid #667eea;padding:12px 20px;margin:20px 0;background:#f8f9fa;border-radius:4px;font-style:italic">$2</blockquote>');
+                
+                // Horizontal line
+                html = html.replace(/(^|\n)---(\n|$)/g, '$1<hr style="border:none;border-top:2px solid #e8eaed;margin:32px 0">$2');
+                
+                // Numbered lists
+                html = html.replace(/(^|\n)(\d+)\. (.+)/g, '$1<li style="margin:8px 0;line-height:1.6">$3</li>');
+                
+                // Bullet lists
+                html = html.replace(/(^|\n)- (.+)/g, '$1<li style="margin:8px 0;line-height:1.6">$2</li>');
+                
+                // Wrap consecutive list items in ul tags
+                html = html.replace(/(<li[^>]*>.*?<\/li>\n?)+/g, function(match) {
+                    return '<ul style="margin:16px 0;padding-left:24px">' + match + '</ul>';
+                });
+            }
             
-            // Convert links
-            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#667eea;text-decoration:none;font-weight:500">$1</a>');
+            // Handle existing table HTML (make responsive)
+            if (html.includes('<table')) {
+                html = html.replace(/<table([^>]*)>/g, '<div style="overflow-x:auto;margin:20px 0"><table$1 style="width:100%;border-collapse:collapse;min-width:300px">');
+                html = html.replace(/<\/table>/g, '</table></div>');
+            }
             
-            // Bold
-            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            // Convert double line breaks to paragraphs
+            html = html.replace(/\n\n+/g, '</p><p style="margin:16px 0;line-height:1.8;color:#3c4043">');
             
-            // Italic
-            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            // Convert single line breaks to <br>
+            html = html.replace(/\n/g, '<br>');
             
-            // Strikethrough
-            html = html.replace(/~~(.+?)~~/g, '<s>$1</s>');
-            
-            // Inline code
-            html = html.replace(/`(.+?)`/g, '<code style="background:#f1f3f4;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:0.9em">$1</code>');
-            
-            // Headings
-            html = html.replace(/\n#### (.+)/g, '\n<h4 style="margin-top:24px;margin-bottom:12px;font-size:1.1em;color:#202124">$1</h4>');
-            html = html.replace(/\n### (.+)/g, '\n<h3 style="margin-top:28px;margin-bottom:14px;font-size:1.3em;color:#202124">$1</h3>');
-            html = html.replace(/\n## (.+)/g, '\n<h2 style="margin-top:32px;margin-bottom:16px;font-size:1.6em;color:#202124">$1</h2>');
-            
-            // Lists
-            html = html.replace(/\n- (.+)/g, '\n<li style="margin:8px 0;line-height:1.6">$1</li>');
-            html = html.replace(/\n\d+\. (.+)/g, '\n<li style="margin:8px 0;line-height:1.6">$1</li>');
-            html = html.replace(/(<li[^>]*>.*<\/li>\n)+/g, '<ul style="margin:16px 0;padding-left:24px">$&</ul>');
-            
-            // Blockquotes
-            html = html.replace(/\n> (.+)/g, '\n<blockquote style="border-left:4px solid #667eea;padding:12px 20px;margin:20px 0;background:#f8f9fa;border-radius:4px;font-style:italic">$1</blockquote>');
-            
-            // Code blocks
-            html = html.replace(/```\n([\s\S]+?)\n```/g, '<pre style="background:#202124;color:#fff;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0"><code style="font-family:monospace;font-size:0.9em;line-height:1.6">$1</code></pre>');
-            
-            // Horizontal line
-            html = html.replace(/\n---\n/g, '\n<hr style="border:none;border-top:2px solid #e8eaed;margin:32px 0">\n');
-            
-            // Paragraphs
-            html = html.replace(/\n\n/g, '</p><p style="margin:16px 0;line-height:1.8;color:#3c4043">');
-            
-            // Wrap in responsive container
-            html = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word"><p style="margin:16px 0;line-height:1.8;color:#3c4043">${html}</p></div>`;
-            
-            // Add responsive meta for tables
-            html = html.replace(/<table>/g, '<div style="overflow-x:auto;margin:20px 0"><table style="width:100%;border-collapse:collapse;min-width:300px">');
-            html = html.replace(/<\/table>/g, '</table></div>');
+            // Wrap everything in a responsive container
+            html = '<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;font-size:16px;line-height:1.8"><p style="margin:16px 0;line-height:1.8;color:#3c4043">' + html + '</p></div>';
             
             return html;
         }
