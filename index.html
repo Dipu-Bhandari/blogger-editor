@@ -167,7 +167,7 @@
             content: '';
         }
 
-        /* FIXED: Consistent table styling for light AND dark mode */
+        /* Editor table styling */
         #editor table {
             width: 100%;
             border-collapse: collapse;
@@ -183,23 +183,17 @@
             padding: 12px;
             text-align: left;
             min-width: 100px;
-            position: relative;
             background: #fff;
+            color: #202124;
         }
 
         #editor table th {
             background: #f8f9fa;
             font-weight: 600;
-            color: #202124;
         }
 
         #editor table tr:hover td {
             background: #f8f9fa;
-        }
-
-        #editor table td[contenteditable="true"],
-        #editor table th[contenteditable="true"] {
-            cursor: text;
         }
 
         #editor table td:focus,
@@ -232,9 +226,7 @@
             padding-left: 24px;
         }
 
-        #editor li {
-            margin: 8px 0;
-        }
+        #editor li { margin: 8px 0; }
 
         #editor blockquote {
             border-left: 4px solid #1a73e8;
@@ -303,9 +295,7 @@
             justify-content: center;
         }
 
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
 
         .modal-content {
             background: white;
@@ -551,7 +541,6 @@
         function openModal(modalId) {
             saveSelection();
             
-            // Reset input values when opening modal
             if (modalId === 'tableModal') {
                 document.getElementById('tableRows').value = '3';
                 document.getElementById('tableCols').value = '3';
@@ -564,8 +553,6 @@
             }
             
             document.getElementById(modalId).classList.add('active');
-            
-            // Focus first input
             setTimeout(() => {
                 const firstInput = document.querySelector(`#${modalId} input`);
                 if (firstInput) firstInput.focus();
@@ -585,34 +572,31 @@
             const rows = parseInt(rowsInput.value);
             const cols = parseInt(colsInput.value);
             
-            // Validation
             if (isNaN(rows) || isNaN(cols)) {
                 showStatus('Please enter valid numbers', 'error');
                 return;
             }
-            
             if (rows < 1 || rows > 20) {
                 showStatus('Rows must be between 1 and 20', 'error');
                 return;
             }
-            
             if (cols < 1 || cols > 10) {
                 showStatus('Columns must be between 1 and 10', 'error');
                 return;
             }
 
-            // Create table HTML with explicit styling
-            let html = '<table style="width:100%;border-collapse:collapse;margin:20px 0;background:#fff;border:2px solid #dadce0;"><thead><tr>';
+            // Create table with MAXIMUM styling to override ANY theme CSS
+            let html = '<table style="width:100%!important;border-collapse:collapse!important;margin:20px 0!important;background:#fff!important;border:2px solid #dadce0!important;"><thead><tr>';
             
             for (let i = 0; i < cols; i++) {
-                html += `<th contenteditable="true" style="border:1px solid #dadce0;padding:12px;background:#f8f9fa;font-weight:600;color:#202124;">Header ${i + 1}</th>`;
+                html += `<th contenteditable="true" style="border:1px solid #dadce0!important;padding:12px!important;background:#f8f9fa!important;font-weight:600!important;color:#202124!important;text-align:left!important;">Header ${i + 1}</th>`;
             }
             html += '</tr></thead><tbody>';
             
             for (let i = 0; i < rows; i++) {
                 html += '<tr>';
                 for (let j = 0; j < cols; j++) {
-                    html += `<td contenteditable="true" style="border:1px solid #dadce0;padding:12px;background:#fff;color:#202124;">Cell</td>`;
+                    html += `<td contenteditable="true" style="border:1px solid #dadce0!important;padding:12px!important;background:#fff!important;color:#202124!important;text-align:left!important;">Cell</td>`;
                 }
                 html += '</tr>';
             }
@@ -712,14 +696,14 @@
         function formatForBlogger(html) {
             let formatted = html;
             
-            // Remove contenteditable attributes
+            // Remove contenteditable
             formatted = formatted.replace(/\scontenteditable="true"/g, '');
             
-            // Ensure table styling is preserved
-            formatted = formatted.replace(/<table>/g, '<div style="overflow-x:auto;margin:20px 0"><table style="width:100%;border-collapse:collapse;border:2px solid #dadce0;background:#fff;">');
+            // Add !important to all table styles to override your theme's dark mode CSS
+            formatted = formatted.replace(/<table\s+style="([^"]*)"/g, '<div style="overflow-x:auto!important;margin:20px 0!important;"><table style="$1"');
             formatted = formatted.replace(/<\/table>/g, '</table></div>');
             
-            // Wrap in responsive container
+            // Wrap in container
             formatted = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;line-height:1.6;color:#202124;">${formatted}</div>`;
             
             return formatted;
@@ -737,11 +721,8 @@
             setTimeout(() => status.remove(), 4000);
         }
 
-        // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             loadGoogleAPI();
-            
-            // Initialize input values
             document.getElementById('tableRows').value = '3';
             document.getElementById('tableCols').value = '3';
         });
