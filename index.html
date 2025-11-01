@@ -35,6 +35,7 @@
             display:flex;align-items:center;gap:6px;white-space:nowrap;}
         .toolbar button:hover{background:#f1f3f4;}
         .toolbar button:active{background:#e8eaed;}
+        .toolbar button.active{background:#e0e0e0;color:#1a73e8;font-weight:600;}
         .toolbar-divider{width:1px;background:#e0e0e0;margin:0 4px;}
 
         .editor-container{flex:1;display:flex;overflow:hidden;}
@@ -172,20 +173,31 @@
         <button onclick="execCmd('underline')" aria-label="Underline"><u>U</u></button>
         <button onclick="execCmd('strikeThrough')" aria-label="Strikethrough"><s>S</s></button>
         <div class="toolbar-divider"></div>
+
         <button onclick="execCmd('formatBlock','h1')" aria-label="Heading 1">H1</button>
         <button onclick="execCmd('formatBlock','h2')" aria-label="Heading 2">H2</button>
         <button onclick="execCmd('formatBlock','h3')" aria-label="Heading 3">H3</button>
         <button onclick="execCmd('formatBlock','p')" aria-label="Paragraph">P</button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List"><span aria-hidden="true">•</span> List</button>
-        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List"><span aria-hidden="true">1.</span> List</button>
-        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote"><span aria-hidden="true">"</span> Quote</button>
+
+        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List">• List</button>
+        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List">1. List</button>
+        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote">" Quote</button>
         <div class="toolbar-divider"></div>
-        <button onclick="openModal('linkModal')" aria-label="Insert Link"><span aria-hidden="true">Link</span> Link</button>
-        <button onclick="openModal('imageModal')" aria-label="Insert Image"><span aria-hidden="true">Image</span> Image</button>
-        <button onclick="openModal('tableModal')" aria-label="Insert Table"><span aria-hidden="true">Table</span> Table</button>
+
+        <!-- Alignment Buttons -->
+        <button id="alignLeft" onclick="alignText('justifyLeft')" aria-label="Align Left">Left</button>
+        <button id="alignCenter" onclick="alignText('justifyCenter')" aria-label="Align Center">Center</button>
+        <button id="alignRight" onclick="alignText('justifyRight')" aria-label="Align Right">Right</button>
+        <button id="alignJustify" onclick="alignText('justifyFull')" aria-label="Justify">Justify</button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting"><span aria-hidden="true">X</span> Clear</button>
+
+        <button onclick="openModal('linkModal')" aria-label="Insert Link">Link</button>
+        <button onclick="openModal('imageModal')" aria-label="Insert Image">Image</button>
+        <button onclick="openModal('tableModal')" aria-label="Insert Table">Table</button>
+        <div class="toolbar-divider"></div>
+
+        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting">X Clear</button>
     </div>
 
     <!-- Editor -->
@@ -301,6 +313,36 @@
         function execCmd(c,v=null){document.execCommand(c,false,v);document.getElementById('editor').focus();}
         function insertHTML(h){restoreSelection();document.execCommand('insertHTML',false,h);}
 
+        /* ---------- TEXT ALIGNMENT ---------- */
+        function alignText(alignCmd){
+            document.execCommand(alignCmd, false, null);
+            updateAlignmentButtons();
+            document.getElementById('editor').focus();
+        }
+
+        function updateAlignmentButtons(){
+            const buttons = ['alignLeft','alignCenter','alignRight','alignJustify'];
+            buttons.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.remove('active');
+            });
+            const align = document.queryCommandState('justifyLeft') ? 'alignLeft' :
+                          document.queryCommandState('justifyCenter') ? 'alignCenter' :
+                          document.queryCommandState('justifyRight') ? 'alignRight' :
+                          document.queryCommandState('justifyFull') ? 'alignJustify' : null;
+            if (align) document.getElementById(align).classList.add('active');
+        }
+
+        /* ---------- KEYBOARD SHORTCUTS FOR ALIGNMENT ---------- */
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.shiftKey) {
+                if (e.key === 'L') { e.preventDefault(); alignText('justifyLeft'); }
+                else if (e.key === 'C') { e.preventDefault(); alignText('justifyCenter'); }
+                else if (e.key === 'R') { e.preventDefault(); alignText('justifyRight'); }
+                else if (e.key === 'J') { e.preventDefault(); alignText('justifyFull'); }
+            }
+        });
+
         /* ---------- MODALS ---------- */
         function openModal(id){
             saveSelection();document.getElementById(id).classList.add('active');
@@ -406,19 +448,17 @@
             setTimeout(()=>s.remove(),4000);
         }
 
-        /* ---------- DARK-MODE PREVIEW IN EDITOR (optional toggle) ---------- */
-        document.addEventListener('keydown',e=>{
-            if(e.ctrlKey && e.shiftKey && e.key==='D'){
-                document.body.classList.toggle('dark-mode');
-            }
-        });
-
         /* ---------- INIT ---------- */
-        document.addEventListener('DOMContentLoaded',loadGoogleAPI);
+        document.addEventListener('DOMContentLoaded',()=>{
+            loadGoogleAPI();
+            updateAlignmentButtons();
+        });
         document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
         document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',ev=>{if(ev.target===m) closeModal();}));
         document.getElementById('editor').addEventListener('keyup',saveSelection);
         document.getElementById('editor').addEventListener('mouseup',saveSelection);
+        document.getElementById('editor').addEventListener('click',updateAlignmentButtons);
+        document.getElementById('editor').addEventListener('keyup',updateAlignmentButtons);
     </script>
 </body>
 </html>
