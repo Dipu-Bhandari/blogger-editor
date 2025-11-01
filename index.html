@@ -10,17 +10,19 @@
         body{
             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
             background:#f5f5f5;color:#212529;height:100vh;display:flex;flex-direction:column;
+            transition: background 0.3s, color 0.3s;
         }
         .header{background:#fff;border-bottom:1px solid #e0e0e0;padding:12px 20px;
-            display:flex;justify-content:space-between;align-items:center;gap:20px;}
+            display:flex;justify-content:space-between;align-items:center;gap:20px;
+            transition: background 0.3s, border 0.3s;}
         .header-left{display:flex;align-items:center;gap:20px;flex:1;}
         .logo{font-size:18px;font-weight:600;color:#1a73e8;}
         #title{flex:1;border:none;font-size:16px;padding:8px 12px;border-radius:4px;
-            background:#f8f9fa;max-width:500px;}
+            background:#f8f9fa;max-width:500px;transition: all 0.3s;}
         #title:focus{outline:2px solid #1a73e8;background:#fff;}
         .header-actions{display:flex;gap:8px;align-items:center;}
         .blog-select{padding:8px 12px;border:1px solid #dadce0;border-radius:4px;
-            font-size:14px;background:#fff;cursor:pointer;}
+            font-size:14px;background:#fff;cursor:pointer;transition: all 0.3s;}
         .btn{padding:8px 16px;border:none;border-radius:4px;cursor:pointer;
             font-size:14px;font-weight:500;transition:all .2s;}
         .btn-primary{background:#1a73e8;color:#fff;}
@@ -29,20 +31,31 @@
         .btn-secondary:hover{background:#f8f9fa;}
 
         .toolbar{background:#fff;border-bottom:1px solid #e0e0e0;padding:8px 20px;
-            display:flex;gap:4px;overflow-x:auto;flex-wrap:wrap;}
+            display:flex;gap:4px;overflow-x:auto;flex-wrap:wrap;transition: background 0.3s;}
         .toolbar button{background:transparent;border:none;padding:6px 10px;
             border-radius:4px;cursor:pointer;font-size:14px;color:#5f6368;
-            display:flex;align-items:center;gap:6px;white-space:nowrap;}
+            display:flex;align-items:center;gap:6px;white-space:nowrap;transition: all 0.2s;}
         .toolbar button:hover{background:#f1f3f4;}
         .toolbar button:active{background:#e8eaed;}
         .toolbar button.active{background:#e0e0e0;}
-        .toolbar input[type="color"]{width:32px;height:32px;padding:0;border:none;cursor:pointer;}
+        .toolbar input[type="color"]{
+            width:36px;height:36px;padding:0;border:none;cursor:pointer;
+            border-radius:50%;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .toolbar input[type="color"]:hover{transform:scale(1.1);box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+        .toolbar input[type="color"]::-webkit-color-swatch-wrapper{padding:0;}
+        .toolbar input[type="color"]::-webkit-color-swatch{border:none;border-radius:50%;}
         .toolbar-divider{width:1px;background:#e0e0e0;margin:0 4px;}
 
         .editor-container{flex:1;display:flex;overflow:hidden;}
-        .editor-wrapper{flex:1;overflow-y:auto;padding:40px 20px;background:#fff;}
-        #editor{max-width:900px;margin:0 auto;min-height:calc(100vh - 200px);
-            outline:none;font-size:16px;line-height:1.6;color:#212529;}
+        .editor-wrapper{flex:1;overflow-y:auto;padding:40px 20px;background:#fff;transition: background 0.3s;}
+        #editor{
+            max-width:900px;margin:0 auto;min-height:calc(100vh - 200px);
+            outline:none;font-size:16px;line-height:1.6;
+            color: var(--bs-body-color) !important;
+            caret-color: var(--bs-body-color);
+        }
         #editor:empty:before{content:'Start writing...';color:#9aa0a6;}
         #editor:focus:before{content:'';}
 
@@ -51,32 +64,32 @@
             --jt-primary:#f67938;
             --bs-body-bg:#ffffff;
             --bs-body-color:#212529;
-            --highlight-bg:rgba(246,121,56,0.3);
+            --highlight-bg:rgba(246,121,56,0.35);
         }
         .dark-mode{
             --bs-body-bg:#1a1a1a;
-            --bs-body-color:#e0e0e0;
-            --highlight-bg:rgba(246,121,56,0.4);
+            --bs-body-color:#e6e6e6;
+            --highlight-bg:rgba(246,121,56,0.55);
         }
-        body.dark-mode{background:#121212;color:#e0e0e0;}
+        body.dark-mode{background:#121212;color:#e6e6e6;}
         .dark-mode .header,.dark-mode .toolbar,.dark-mode .editor-wrapper{background:#1e1e1e;}
-        .dark-mode #title{background:#2d2d2d;color:#e0e0e0;border:1px solid #444;}
-        .dark-mode .btn-secondary{background:#2d2d2d;color:#bbb;border:1px solid #444;}
+        .dark-mode #title{background:#2d2d2d;color:#e6e6e6;border:1px solid #444;}
+        .dark-mode .btn-secondary{background:#2d2d2d;color:#ddd;border:1px solid #444;}
         .dark-mode .btn-secondary:hover{background:#3a3a3a;}
-        .dark-mode .toolbar button{color:#bbb;}
+        .dark-mode .toolbar button{color:#ddd;}
         .dark-mode .toolbar button:hover{background:#333;}
         .dark-mode .toolbar button.active{background:#444;}
+        .dark-mode .toolbar-divider{background:#444;}
 
-        /* ────────────────────── EDITOR CONTENT ────────────────────── */
-        #editor{
-            color: var(--bs-body-color) !important;
-        }
-        #editor *{
-            color: inherit !important;
-        }
+        /* Force visibility in editor */
+        #editor *{color: inherit !important;}
+        #editor span[style*="color"]{color: inherit !important;}
 
-        .highlight{background:var(--highlight-bg);padding:0 4px;border-radius:3px;}
-        .text-color{color:inherit !important;}
+        .highlight{
+            background:var(--highlight-bg) !important;
+            padding:0 4px;border-radius:3px;
+            transition: background 0.3s;
+        }
 
         /* ────────────────────── RESPONSIVE TABLE ────────────────────── */
         .responsive-table{
@@ -98,7 +111,7 @@
         .responsive-table tr:hover{background:#f9f9f9;}
         .responsive-table tr:nth-child(even){background:#fafafa;}
 
-        .dark-mode .responsive-table table{background:#1a1a1a;color:#e0e0e0;}
+        .dark-mode .responsive-table table{background:#1a1a1a;color:#e6e6e6;}
         .dark-mode .responsive-table th{background:#2d2d2d !important;color:#fff !important;}
         .dark-mode .responsive-table td{border-color:#444 !important;}
         .dark-mode .responsive-table tr:hover{background:#2a2a2a !important;}
@@ -109,7 +122,7 @@
             .responsive-table th,.responsive-table td{padding:10px 8px;}
         }
 
-        /* ────────────────────── OTHER STYLES ────────────────────── */
+        /* ────────────────────── EDITOR CONTENT ────────────────────── */
         #editor table{width:100%;border-collapse:collapse;margin:20px 0;background:#fff;}
         #editor th,#editor td{border:1px solid #dadce0;padding:12px;text-align:left;min-width:100px;}
         #editor th{background:#f8f9fa;font-weight:600;}
@@ -140,12 +153,15 @@
             background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;}
         .modal.active{display:flex;}
         .modal-content{background:#fff;border-radius:8px;padding:24px;max-width:400px;
-            width:90%;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+            width:90%;box-shadow:0 8px 24px rgba(0,0,0,.2);transition: background 0.3s;}
+        .dark-mode .modal-content{background:#2d2d2d;color:#e6e6e6;}
         .modal-header{font-size:18px;font-weight:600;margin-bottom:16px;}
         .modal-body{margin-bottom:20px;}
         .modal-body label{display:block;font-size:14px;font-weight:500;margin-bottom:6px;}
         .modal-input{width:100%;padding:10px;border:1px solid #dadce0;
-            border-radius:4px;font-size:14px;margin-bottom:12px;}
+            border-radius:4px;font-size:14px;margin-bottom:12px;background:#fff;color:#212529;
+            transition: all 0.3s;}
+        .dark-mode .modal-input{background:#3a3a3a;color:#e6e6e6;border-color:#555;}
         .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
         .hidden{display:none;}
 
@@ -208,8 +224,9 @@
         <div class="toolbar-divider"></div>
 
         <!-- Text & Highlight Color -->
-        <input type="color" id="textColorPicker" title="Text Color" value="#212529" onchange="applyTextColor(this.value)">
-        <input type="color" id="highlightColorPicker" title="Highlight Color" value="#f67938" onchange="applyHighlightColor(this.value)">
+        <input type="color" id="textColorPicker" title="Text Color" value="#212529">
+        <input type="color" id="highlightColorPicker" title="Highlight Color" value="#f67938">
+        <button onclick="applySelectedTextColor()" aria-label="Apply Text Color">A</button>
         <button onclick="toggleHighlight()" aria-label="Apply Highlight">Highlight</button>
         <div class="toolbar-divider"></div>
 
@@ -331,25 +348,26 @@
             }
         }
 
-        /* ---------- COMMANDS ---------- */
-        function execCmd(c,v=null){document.execCommand(c,false,v);document.getElementById('editor').focus();}
-        function insertHTML(h){restoreSelection();document.execCommand('insertHTML',false,h);}
-
-        /* ---------- TEXT COLOR ---------- */
-        function applyTextColor(color){
+        /* ---------- TEXT COLOR (SELECTED TEXT ONLY) ---------- */
+        function applySelectedTextColor(){
+            const color = document.getElementById('textColorPicker').value;
             saveSelection();
-            if (!lastSelectionRange) return;
+            if (!lastSelectionRange || lastSelectionRange.collapsed) {
+                showStatus('Select text first','info');
+                return;
+            }
             document.execCommand('styleWithCSS', false, true);
             document.execCommand('foreColor', false, color);
             document.execCommand('styleWithCSS', false, false);
+            document.getElementById('editor').focus();
         }
 
-        /* ---------- HIGHLIGHT COLOR ---------- */
+        /* ---------- HIGHLIGHT COLOR (DYNAMIC & VISIBLE) ---------- */
         function applyHighlightColor(color){
-            const opacity = document.body.classList.contains('dark-mode') ? 0.4 : 0.3;
+            const isDark = document.body.classList.contains('dark-mode');
+            const opacity = isDark ? 0.55 : 0.35;
             const rgba = hexToRgba(color, opacity);
             document.documentElement.style.setProperty('--highlight-bg', rgba);
-            document.getElementById('highlightColorPicker').value = color;
         }
 
         function hexToRgba(hex, alpha){
@@ -362,8 +380,10 @@
         function toggleHighlight(){
             saveSelection();
             const sel = window.getSelection();
-            if (!sel.rangeCount || sel.isCollapsed) return;
-
+            if (!sel.rangeCount || sel.isCollapsed) {
+                showStatus('Select text to highlight','info');
+                return;
+            }
             const range = sel.getRangeAt(0);
             const span = document.createElement('span');
             span.className = 'highlight';
@@ -371,7 +391,7 @@
                 range.surroundContents(span);
                 sel.removeAllRanges();
             } catch (e) {
-                insertHTML('<span class="highlight">' + sel.toString() + '</span>');
+                document.execCommand('insertHTML', false, '<span class="highlight">' + sel.toString() + '</span>');
             }
             document.getElementById('editor').focus();
         }
@@ -395,12 +415,7 @@
             document.body.classList.toggle('dark-mode');
             const btn = document.getElementById('darkToggle');
             btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-
-            // Update highlight opacity
-            const color = document.getElementById('highlightColorPicker').value;
-            const opacity = document.body.classList.contains('dark-mode') ? 0.4 : 0.3;
-            const rgba = hexToRgba(color, opacity);
-            document.documentElement.style.setProperty('--highlight-bg', rgba);
+            applyHighlightColor(document.getElementById('highlightColorPicker').value);
         }
 
         /* ---------- MODALS ---------- */
@@ -482,12 +497,12 @@
                     .responsive-table th,.responsive-table td{padding:12px 14px;border:1px solid #ddd;word-wrap:break-word;max-width:300px;}
                     .responsive-table tr:hover{background:#f9f9f9;}
                     .responsive-table tr:nth-child(even){background:#fafafa;}
-                    .dark-mode .responsive-table table{background:#1a1a1a;color:#e0e0e0;}
+                    .dark-mode .responsive-table table{background:#1a1a1a;color:#e6e6e6;}
                     .dark-mode .responsive-table th{background:#2d2d2d !important;color:#fff !important;}
                     .dark-mode .responsive-table td{border-color:#444 !important;}
                     .dark-mode .responsive-table tr:hover{background:#2a2a2a !important;}
                     .dark-mode .responsive-table tr:nth-child(even){background:#222;}
-                    .highlight{background:var(--highlight-bg);padding:0 4px;border-radius:3px;}
+                    .highlight{background:var(--highlight-bg) !important;padding:0 4px;border-radius:3px;}
                     @media(max-width:768px){.responsive-table table{font-size:14px;}
                     .responsive-table th,.responsive-table td{padding:10px 8px;}}
                 </style>`;
@@ -510,8 +525,10 @@
         /* ---------- INIT ---------- */
         document.addEventListener('DOMContentLoaded',()=>{
             loadGoogleAPI();
-            // Set default highlight
             applyHighlightColor('#f67938');
+            document.getElementById('highlightColorPicker').addEventListener('input', (e) => {
+                applyHighlightColor(e.target.value);
+            });
         });
         document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
         document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',ev=>{if(ev.target===m) closeModal();}));
