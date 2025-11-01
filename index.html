@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Blogger Editor</title>
+    <title>Accessible Blogger Editor</title>
     <style>
-        /* ────────────────────── BASIC LAYOUT ────────────────────── */
+        /* ────────────────────── BASIC EDITOR LAYOUT ────────────────────── */
         *{margin:0;padding:0;box-sizing:border-box;}
         body{
             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -29,64 +29,78 @@
         .btn-secondary:hover{background:#f8f9fa;}
 
         .toolbar{background:#fff;border-bottom:1px solid #e0e0e0;padding:8px 20px;
-            display:flex;gap:4px;overflow-x:auto;flex-wrap:wrap;}
+            display:flex;gap:4px;overflow-x:auto;}
         .toolbar button{background:transparent;border:none;padding:6px 10px;
             border-radius:4px;cursor:pointer;font-size:14px;color:#5f6368;
-            display:flex;align-items:center;gap:6px;white-space:nowrap;transition:all .2s;}
+            display:flex;align-items:center;gap:6px;white-space:nowrap;}
         .toolbar button:hover{background:#f1f3f4;}
         .toolbar button:active{background:#e8eaed;}
-        .toolbar button.active{background:#e0e0e0;color:#1a73e8;font-weight:600;}
-        .toolbar input[type="color"]{
-            width:36px;height:36px;padding:0;border:none;cursor:pointer;
-            border-radius:50%;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.2);
-            transition:transform .2s,box-shadow .2s;
-        }
-        .toolbar input[type="color"]:hover{transform:scale(1.1);box-shadow:0 2px 6px rgba(0,0,0,0.3);}
-        .toolbar input[type="color"]::-webkit-color-swatch-wrapper{padding:0;}
-        .toolbar input[type="color"]::-webkit-color-swatch{border:none;border-radius:50%;}
         .toolbar-divider{width:1px;background:#e0e0e0;margin:0 4px;}
 
         .editor-container{flex:1;display:flex;overflow:hidden;}
         .editor-wrapper{flex:1;overflow-y:auto;padding:40px 20px;background:#fff;}
-        #editor{
-            max-width:900px;margin:0 auto;min-height:calc(100vh - 200px);
-            outline:none;font-size:16px;line-height:1.6;color:#212529;
-        }
+        #editor{max-width:900px;margin:0 auto;min-height:calc(100vh - 200px);
+            outline:none;font-size:16px;line-height:1.6;color:#212529;}
         #editor:empty:before{content:'Start writing...';color:#9aa0a6;}
         #editor:focus:before{content:'';}
 
-        /* ────────────────────── HIGHLIGHT STYLES ────────────────────── */
-        :root{--highlight-bg:rgba(246,121,56,0.35);}
-        .dark-mode{--highlight-bg:rgba(246,121,56,0.55);}
-        .highlight{
-            background:var(--highlight-bg) !important;
-            padding:0 4px;border-radius:3px;
+        /* ────────────────────── LIVE-SITE STYLES (LIGHT + DARK) ────────────────────── */
+        :root{
+            --jt-primary:#f67938;
+            --bs-body-bg:#ffffff;
+            --bs-body-color:#212529;
         }
+        .dark-mode{
+            --bs-body-bg:#1a1a1a;
+            --bs-body-color:#e0e0e0;
+        }
+        body.dark-mode{background:#121212;color:#e0e0e0;}
+        .dark-mode .header,.dark-mode .toolbar,.dark-mode .editor-wrapper{background:#1e1e1e;}
+        .dark-mode #title{background:#2d2d2d;color:#e0e0e0;border:1px solid #444;}
+        .dark-mode .btn-secondary{background:#2d2d2d;color:#bbb;border:1px solid #444;}
+        .dark-mode .btn-secondary:hover{background:#3a3a3a;}
+        .dark-mode .toolbar button{color:#bbb;}
+        .dark-mode .toolbar button:hover{background:#333;}
 
-        /* ────────────────────── RESPONSIVE TABLE ────────────────────── */
+        /* ────────────────────── RESPONSIVE TABLE (injected into posts) ────────────────────── */
         .responsive-table{
             overflow-x:auto;margin:20px 0;border-radius:8px;
             box-shadow:0 1px 3px rgba(0,0,0,.1);
         }
         .responsive-table table{
             width:100%;min-width:600px;border-collapse:collapse;
-            font-size:15px;line-height:1.5;background:#fff;
+            font-size:15px;line-height:1.5;background:var(--bs-body-bg);
         }
         .responsive-table th{
             background:#f5f5f5;color:#333;font-weight:600;text-align:left;
         }
-        .responsive-table th,.responsive-table td{
+        .responsive-table th,
+        .responsive-table td{
             padding:12px 14px;border:1px solid #ddd;
             word-wrap:break-word;max-width:300px;
         }
         .responsive-table tr:hover{background:#f9f9f9;}
         .responsive-table tr:nth-child(even){background:#fafafa;}
 
-        /* ────────────────────── EDITOR CONTENT ────────────────────── */
+        /* DARK MODE overrides */
+        .dark-mode .responsive-table table{background:#1a1a1a;color:#e0e0e0;}
+        .dark-mode .responsive-table th{background:#2d2d2d !important;color:#fff !important;}
+        .dark-mode .responsive-table td{border-color:#444 !important;}
+        .dark-mode .responsive-table tr:hover{background:#2a2a2a !important;}
+        .dark-mode .responsive-table tr:nth-child(even){background:#222;}
+
+        @media (max-width:768px){
+            .responsive-table table{font-size:14px;}
+            .responsive-table th,
+            .responsive-table td{padding:10px 8px;}
+        }
+
+        /* ────────────────────── OTHER EDITOR CONTENT STYLES ────────────────────── */
         #editor table{width:100%;border-collapse:collapse;margin:20px 0;background:#fff;}
         #editor th,#editor td{border:1px solid #dadce0;padding:12px;text-align:left;min-width:100px;}
         #editor th{background:#f8f9fa;font-weight:600;}
-        #editor tr:hover{background:#f8f9f9;}
+        #editor tr:hover{background:#f8f9fa;}
+        #editor td:focus,#editor th:focus{outline:2px solid #1a73e8;background:#fff;}
         #editor img{max-width:100%;height:auto;margin:20px 0;border-radius:4px;}
         #editor h1,#editor h2,#editor h3,#editor h4{margin-top:24px;margin-bottom:12px;font-weight:600;}
         #editor h1{font-size:32px;}#editor h2{font-size:24px;}#editor h3{font-size:20px;}#editor h4{font-size:18px;}
@@ -153,46 +167,25 @@
 
     <!-- Toolbar -->
     <div class="toolbar" role="toolbar" aria-label="Text formatting toolbar">
-        <!-- Font Style -->
         <button onclick="execCmd('bold')" aria-label="Bold"><b>B</b></button>
         <button onclick="execCmd('italic')" aria-label="Italic"><i>I</i></button>
         <button onclick="execCmd('underline')" aria-label="Underline"><u>U</u></button>
         <button onclick="execCmd('strikeThrough')" aria-label="Strikethrough"><s>S</s></button>
         <div class="toolbar-divider"></div>
-
-        <!-- Headings -->
         <button onclick="execCmd('formatBlock','h1')" aria-label="Heading 1">H1</button>
         <button onclick="execCmd('formatBlock','h2')" aria-label="Heading 2">H2</button>
         <button onclick="execCmd('formatBlock','h3')" aria-label="Heading 3">H3</button>
         <button onclick="execCmd('formatBlock','p')" aria-label="Paragraph">P</button>
         <div class="toolbar-divider"></div>
-
-        <!-- Lists & Quote -->
-        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List">• List</button>
-        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List">1. List</button>
-        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote">" Quote</button>
+        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List"><span aria-hidden="true">•</span> List</button>
+        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List"><span aria-hidden="true">1.</span> List</button>
+        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote"><span aria-hidden="true">"</span> Quote</button>
         <div class="toolbar-divider"></div>
-
-        <!-- Alignment -->
-        <button id="alignLeft" onclick="execCmd('justifyLeft')" aria-label="Align Left">Left</button>
-        <button id="alignCenter" onclick="execCmd('justifyCenter')" aria-label="Align Center">Center</button>
-        <button id="alignRight" onclick="execCmd('justifyRight')" aria-label="Align Right">Right</button>
-        <button id="alignJustify" onclick="execCmd('justifyFull')" aria-label="Justify">Justify</button>
+        <button onclick="openModal('linkModal')" aria-label="Insert Link"><span aria-hidden="true">Link</span> Link</button>
+        <button onclick="openModal('imageModal')" aria-label="Insert Image"><span aria-hidden="true">Image</span> Image</button>
+        <button onclick="openModal('tableModal')" aria-label="Insert Table"><span aria-hidden="true">Table</span> Table</button>
         <div class="toolbar-divider"></div>
-
-        <!-- Highlight -->
-        <input type="color" id="highlightColorPicker" title="Highlight Color" value="#f67938">
-        <button id="highlightBtn" onclick="toggleHighlightMode()" aria-label="Highlight Text">Highlight</button>
-        <div class="toolbar-divider"></div>
-
-        <!-- Insert -->
-        <button onclick="openModal('linkModal')" aria-label="Insert Link">Link</button>
-        <button onclick="openModal('imageModal')" aria-label="Insert Image">Image</button>
-        <button onclick="openModal('tableModal')" aria-label="Insert Table">Table</button>
-        <div class="toolbar-divider"></div>
-
-        <!-- Clear -->
-        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting">X Clear</button>
+        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting"><span aria-hidden="true">X</span> Clear</button>
     </div>
 
     <!-- Editor -->
@@ -202,7 +195,7 @@
         </div>
     </main>
 
-    <!-- Modals -->
+    <!-- Table Modal -->
     <div class="modal" id="tableModal" role="dialog" aria-modal="true" aria-labelledby="tableModalHeader">
         <div class="modal-content">
             <h2 class="modal-header" id="tableModalHeader">Insert Table</h2>
@@ -219,6 +212,7 @@
         </div>
     </div>
 
+    <!-- Link Modal -->
     <div class="modal" id="linkModal" role="dialog" aria-modal="true" aria-labelledby="linkModalHeader">
         <div class="modal-content">
             <h2 class="modal-header" id="linkModalHeader">Insert Link</h2>
@@ -235,14 +229,15 @@
         </div>
     </div>
 
+    <!-- Image Modal -->
     <div class="modal" id="imageModal" role="dialog" aria-modal="true" aria-labelledby="imageModalHeader">
         <div class="modal-content">
             <h2 class="modal-header" id="imageModalHeader">Insert Image</h2>
             <div class="modal-body">
                 <label for="imageUrl">Image URL</label>
                 <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL">
-                <label for="imageAlt">Alt text</label>
-                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat">
+                <label for="imageAlt">Alt text (for accessibility)</label>
+                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -255,7 +250,6 @@
         const CLIENT_ID = '942968999133-nuldtmg604hjfogobnpeaq55vhd0v4tr.apps.googleusercontent.com';
         const SCOPES = 'https://www.googleapis.com/auth/blogger';
         let accessToken = null, blogs = [], lastSelectionRange = null;
-        let highlightMode = false;
 
         /* ---------- GOOGLE SIGN-IN ---------- */
         function loadGoogleAPI(){
@@ -264,7 +258,7 @@
             document.head.appendChild(s);
         }
         function initializeGoogleSignIn(){
-            google.accounts.id.initialize({client_id:CLIENT_ID,callback:()=>{}});
+            google.accounts.id.initialize({client_id:CLIENT_ID,callback:()=>{} });
         }
         function signIn(){
             const client=google.accounts.oauth2.initTokenClient({
@@ -292,7 +286,7 @@
             }catch(e){showStatus('Error loading blogs','error');}
         }
 
-        /* ---------- SELECTION ---------- */
+        /* ---------- SELECTION HELPERS ---------- */
         function saveSelection(){
             const s=window.getSelection();
             if(s.rangeCount>0) lastSelectionRange=s.getRangeAt(0);
@@ -303,74 +297,14 @@
             }
         }
 
-        /* ---------- COMMANDS ---------- */
+        /* ---------- BASIC COMMANDS ---------- */
         function execCmd(c,v=null){document.execCommand(c,false,v);document.getElementById('editor').focus();}
-
-        /* ---------- HIGHLIGHT MODE (TOGGLE ON/OFF) ---------- */
-        function toggleHighlightMode(){
-            highlightMode = !highlightMode;
-            const btn = document.getElementById('highlightBtn');
-            btn.classList.toggle('active', highlightMode);
-            if (!highlightMode) {
-                showStatus('Highlight mode off','info');
-            } else {
-                showStatus('Highlight mode on — select text to highlight','info');
-            }
-            document.getElementById('editor').focus();
-        }
-
-        // Apply highlight on mouseup when in highlight mode
-        document.getElementById('editor').addEventListener('mouseup', () => {
-            if (highlightMode) {
-                const sel = window.getSelection();
-                if (sel.rangeCount && !sel.isCollapsed) {
-                    const range = sel.getRangeAt(0);
-                    const span = document.createElement('span');
-                    span.className = 'highlight';
-                    try {
-                        range.surroundContents(span);
-                    } catch (e) {
-                        document.execCommand('insertHTML', false, '<span class="highlight">' + sel.toString() + '</span>');
-                    }
-                    sel.removeAllRanges();
-                }
-            }
-        });
-
-        // Update highlight color
-        document.getElementById('highlightColorPicker').addEventListener('input', (e) => {
-            const color = e.target.value;
-            const isDark = document.documentElement.classList.contains('dark-mode');
-            const opacity = isDark ? 0.55 : 0.35;
-            const rgba = hexToRgba(color, opacity);
-            document.documentElement.style.setProperty('--highlight-bg', rgba);
-        });
-
-        function hexToRgba(hex, alpha){
-            const r = parseInt(hex.slice(1,3),16);
-            const g = parseInt(hex.slice(3,5),16);
-            const b = parseInt(hex.slice(5,7),16);
-            return `rgba(${r},${g},${b},${alpha})`;
-        }
-
-        /* ---------- ALIGNMENT ACTIVE STATE ---------- */
-        function updateAlignmentButtons(){
-            const buttons = ['alignLeft','alignCenter','alignRight','alignJustify'];
-            buttons.forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.classList.remove('active');
-            });
-            const align = document.queryCommandState('justifyLeft') ? 'alignLeft' :
-                          document.queryCommandState('justifyCenter') ? 'alignCenter' :
-                          document.queryCommandState('justifyRight') ? 'alignRight' :
-                          document.queryCommandState('justifyFull') ? 'alignJustify' : null;
-            if (align) document.getElementById(align).classList.add('active');
-        }
+        function insertHTML(h){restoreSelection();document.execCommand('insertHTML',false,h);}
 
         /* ---------- MODALS ---------- */
         function openModal(id){
             saveSelection();document.getElementById(id).classList.add('active');
-            const first=document.querySelector(`#${id} input`);
+            const first=document.querySelector(`#${id} input, #${id} select`);
             if(first) first.focus();
         }
         function closeModal(){
@@ -378,7 +312,7 @@
             document.getElementById('editor').focus();
         }
 
-        /* ---------- TABLE ---------- */
+        /* ---------- TABLE (responsive + dark-mode ready) ---------- */
         function createTable(){
             const rows=parseInt(document.getElementById('tableRows').value);
             const cols=parseInt(document.getElementById('tableCols').value);
@@ -392,8 +326,7 @@
                 html+='</tr>';
             }
             html+='</tbody></table></div><p><br></p>';
-            document.execCommand('insertHTML', false, html);
-            closeModal();
+            insertHTML(html);closeModal();
         }
 
         /* ---------- LINK & IMAGE ---------- */
@@ -401,14 +334,13 @@
             const text=document.getElementById('linkText').value;
             const url=document.getElementById('linkUrl').value;
             if(!url){showStatus('Please enter a URL','error');return;}
-            document.execCommand('insertHTML', false, `<a href="${url}">${text||url}</a>`);
-            closeModal();
+            insertHTML(`<a href="${url}">${text||url}</a>`);closeModal();
         }
         function createImage(){
             const url=document.getElementById('imageUrl').value;
             const alt=document.getElementById('imageAlt').value;
             if(!url){showStatus('Please enter an image URL','error');return;}
-            document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;"><p><br></p>`);
+            insertHTML(`<img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;"><p><br></p>`);
             closeModal();
         }
 
@@ -438,29 +370,30 @@
             }catch(e){showStatus('Error: '+e.message,'error');}
         }
 
-        /* ---------- INJECT CSS (TABLE + HIGHLIGHT) ---------- */
+        /* ---------- INJECT RESPONSIVE + DARK-MODE CSS INTO EVERY POST ---------- */
         function formatForBlogger(html){
-            const css=`
+            const tableCSS=`
                 <style>
                     .responsive-table{overflow-x:auto;margin:20px 0;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.1);}
-                    .responsive-table table{width:100%;min-width:600px;border-collapse:collapse;font-size:15px;line-height:1.5;background:var(--bs-body-bg, #fff);}
+                    .responsive-table table{width:100%;min-width:600px;border-collapse:collapse;font-size:15px;line-height:1.5;background:var(--bs-body-bg);}
                     .responsive-table th{background:#f5f5f5;color:#333;font-weight:600;text-align:left;}
                     .responsive-table th,.responsive-table td{padding:12px 14px;border:1px solid #ddd;word-wrap:break-word;max-width:300px;}
                     .responsive-table tr:hover{background:#f9f9f9;}
                     .responsive-table tr:nth-child(even){background:#fafafa;}
-                    .dark-mode .responsive-table table{background:#1a1a1a;color:#e6e6e6;}
+                    .dark-mode .responsive-table table{background:#1a1a1a;color:#e0e0e0;}
                     .dark-mode .responsive-table th{background:#2d2d2d !important;color:#fff !important;}
                     .dark-mode .responsive-table td{border-color:#444 !important;}
                     .dark-mode .responsive-table tr:hover{background:#2a2a2a !important;}
                     .dark-mode .responsive-table tr:nth-child(even){background:#222;}
-                    .highlight{background:var(--highlight-bg, rgba(246,121,56,0.35)) !important;padding:0 4px;border-radius:3px;}
-                    @media(max-width:768px){.responsive-table table{font-size:14px;}
-                    .responsive-table th,.responsive-table td{padding:10px 8px;}}
+                    @media(max-width:768px){
+                        .responsive-table table{font-size:14px;}
+                        .responsive-table th,.responsive-table td{padding:10px 8px;}
+                    }
                 </style>`;
             const wrapped=html.replace(/<table/g,'<div class="responsive-table"><table')
                               .replace(/<\/table>/g,'</table></div>');
             return `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;">
-                        ${css}${wrapped}
+                        ${tableCSS}${wrapped}
                     </div>`;
         }
 
@@ -473,17 +406,19 @@
             setTimeout(()=>s.remove(),4000);
         }
 
-        /* ---------- INIT ---------- */
-        document.addEventListener('DOMContentLoaded',()=>{
-            loadGoogleAPI();
-            document.getElementById('highlightColorPicker').dispatchEvent(new Event('input'));
+        /* ---------- DARK-MODE PREVIEW IN EDITOR (optional toggle) ---------- */
+        document.addEventListener('keydown',e=>{
+            if(e.ctrlKey && e.shiftKey && e.key==='D'){
+                document.body.classList.toggle('dark-mode');
+            }
         });
+
+        /* ---------- INIT ---------- */
+        document.addEventListener('DOMContentLoaded',loadGoogleAPI);
         document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
         document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',ev=>{if(ev.target===m) closeModal();}));
         document.getElementById('editor').addEventListener('keyup',saveSelection);
         document.getElementById('editor').addEventListener('mouseup',saveSelection);
-        document.getElementById('editor').addEventListener('click',updateAlignmentButtons);
-        document.getElementById('editor').addEventListener('keyup',updateAlignmentButtons);
     </script>
 </body>
 </html>
