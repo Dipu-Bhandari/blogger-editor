@@ -5,418 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accessible Blogger Editor</title>
     <style>
-        /* CSS styles remain the same as the original */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ────────────────────── BASIC EDITOR LAYOUT ────────────────────── */
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+            background:#f5f5f5;color:#212529;height:100vh;display:flex;flex-direction:column;
+        }
+        .header{background:#fff;border-bottom:1px solid #e0e0e0;padding:12px 20px;
+            display:flex;justify-content:space-between;align-items:center;gap:20px;}
+        .header-left{display:flex;align-items:center;gap:20px;flex:1;}
+        .logo{font-size:18px;font-weight:600;color:#1a73e8;}
+        #title{flex:1;border:none;font-size:16px;padding:8px 12px;border-radius:4px;
+            background:#f8f9fa;max-width:500px;}
+        #title:focus{outline:2px solid #1a73e8;background:#fff;}
+        .header-actions{display:flex;gap:8px;align-items:center;}
+        .blog-select{padding:8px 12px;border:1px solid #dadce0;border-radius:4px;
+            font-size:14px;background:#fff;cursor:pointer;}
+        .btn{padding:8px 16px;border:none;border-radius:4px;cursor:pointer;
+            font-size:14px;font-weight:500;transition:all .2s;}
+        .btn-primary{background:#1a73e8;color:#fff;}
+        .btn-primary:hover{background:#1557b0;}
+        .btn-secondary{background:#fff;color:#5f6368;border:1px solid #dadce0;}
+        .btn-secondary:hover{background:#f8f9fa;}
+
+        .toolbar{background:#fff;border-bottom:1px solid #e0e0e0;padding:8px 20px;
+            display:flex;gap:4px;overflow-x:auto;}
+        .toolbar button{background:transparent;border:none;padding:6px 10px;
+            border-radius:4px;cursor:pointer;font-size:14px;color:#5f6368;
+            display:flex;align-items:center;gap:6px;white-space:nowrap;}
+        .toolbar button:hover{background:#f1f3f4;}
+        .toolbar button:active{background:#e8eaed;}
+        .toolbar-divider{width:1px;background:#e0e0e0;margin:0 4px;}
+
+        .editor-container{flex:1;display:flex;overflow:hidden;}
+        .editor-wrapper{flex:1;overflow-y:auto;padding:40px 20px;background:#fff;}
+        #editor{max-width:900px;margin:0 auto;min-height:calc(100vh - 200px);
+            outline:none;font-size:16px;line-height:1.6;color:#212529;}
+        #editor:empty:before{content:'Start writing...';color:#9aa0a6;}
+        #editor:focus:before{content:'';}
+
+        /* ────────────────────── LIVE-SITE STYLES (LIGHT + DARK) ────────────────────── */
+        :root{
+            --jt-primary:#f67938;
+            --bs-body-bg:#ffffff;
+            --bs-body-color:#212529;
+        }
+        .dark-mode{
+            --bs-body-bg:#1a1a1a;
+            --bs-body-color:#e0e0e0;
+        }
+        body.dark-mode{background:#121212;color:#e0e0e0;}
+        .dark-mode .header,.dark-mode .toolbar,.dark-mode .editor-wrapper{background:#1e1e1e;}
+        .dark-mode #title{background:#2d2d2d;color:#e0e0e0;border:1px solid #444;}
+        .dark-mode .btn-secondary{background:#2d2d2d;color:#bbb;border:1px solid #444;}
+        .dark-mode .btn-secondary:hover{background:#3a3a3a;}
+        .dark-mode .toolbar button{color:#bbb;}
+        .dark-mode .toolbar button:hover{background:#333;}
+
+        /* ────────────────────── RESPONSIVE TABLE (injected into posts) ────────────────────── */
+        .responsive-table{
+            overflow-x:auto;margin:20px 0;border-radius:8px;
+            box-shadow:0 1px 3px rgba(0,0,0,.1);
+        }
+        .responsive-table table{
+            width:100%;min-width:600px;border-collapse:collapse;
+            font-size:15px;line-height:1.5;background:var(--bs-body-bg);
+        }
+        .responsive-table th{
+            background:#f5f5f5;color:#333;font-weight:600;text-align:left;
+        }
+        .responsive-table th,
+        .responsive-table td{
+            padding:12px 14px;border:1px solid #ddd;
+            word-wrap:break-word;max-width:300px;
+        }
+        .responsive-table tr:hover{background:#f9f9f9;}
+        .responsive-table tr:nth-child(even){background:#fafafa;}
+
+        /* DARK MODE overrides */
+        .dark-mode .responsive-table table{background:#1a1a1a;color:#e0e0e0;}
+        .dark-mode .responsive-table th{background:#2d2d2d !important;color:#fff !important;}
+        .dark-mode .responsive-table td{border-color:#444 !important;}
+        .dark-mode .responsive-table tr:hover{background:#2a2a2a !important;}
+        .dark-mode .responsive-table tr:nth-child(even){background:#222;}
+
+        @media (max-width:768px){
+            .responsive-table table{font-size:14px;}
+            .responsive-table th,
+            .responsive-table td{padding:10px 8px;}
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            color: #212529;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        /* ────────────────────── OTHER EDITOR CONTENT STYLES ────────────────────── */
+        #editor table{width:100%;border-collapse:collapse;margin:20px 0;background:#fff;}
+        #editor th,#editor td{border:1px solid #dadce0;padding:12px;text-align:left;min-width:100px;}
+        #editor th{background:#f8f9fa;font-weight:600;}
+        #editor tr:hover{background:#f8f9fa;}
+        #editor td:focus,#editor th:focus{outline:2px solid #1a73e8;background:#fff;}
+        #editor img{max-width:100%;height:auto;margin:20px 0;border-radius:4px;}
+        #editor h1,#editor h2,#editor h3,#editor h4{margin-top:24px;margin-bottom:12px;font-weight:600;}
+        #editor h1{font-size:32px;}#editor h2{font-size:24px;}#editor h3{font-size:20px;}#editor h4{font-size:18px;}
+        #editor ul,#editor ol{margin:16px 0;padding-left:24px;}
+        #editor li{margin:8px 0;}
+        #editor blockquote{border-left:4px solid #1a73e8;margin:20px 0;padding:12px 20px;
+            background:#f8f9fa;font-style:italic;}
+        #editor code{background:#f1f3f4;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:.9em;}
+        #editor pre{background:#f1f3f4;padding:16px;border-radius:4px;overflow-x:auto;margin:16px 0;}
+        #editor pre code{background:transparent;padding:0;}
+        #editor a{color:#1a73e8;text-decoration:none;}
+        #editor a:hover{text-decoration:underline;}
 
-        /* Header - Minimal */
-        .header {
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
+        .status{position:fixed;bottom:20px;right:20px;padding:12px 20px;
+            border-radius:4px;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.15);
+            z-index:1000;animation:slideIn .3s ease;}
+        @keyframes slideIn{from{transform:translateY(100px);opacity:0;}
+            to{transform:translateY(0);opacity:1;}}
+        .status.success{background:#0f9d58;color:#fff;}
+        .status.error{background:#d93025;color:#fff;}
+        .status.info{background:#1a73e8;color:#fff;}
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-        }
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;}
+        .modal.active{display:flex;}
+        .modal-content{background:#fff;border-radius:8px;padding:24px;max-width:400px;
+            width:90%;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+        .modal-header{font-size:18px;font-weight:600;margin-bottom:16px;}
+        .modal-body{margin-bottom:20px;}
+        .modal-body label{display:block;font-size:14px;font-weight:500;margin-bottom:6px;}
+        .modal-input{width:100%;padding:10px;border:1px solid #dadce0;
+            border-radius:4px;font-size:14px;margin-bottom:12px;}
+        .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
+        .hidden{display:none;}
 
-        .logo {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a73e8;
-        }
-
-        #title {
-            flex: 1;
-            border: none;
-            font-size: 16px;
-            padding: 8px 12px;
-            border-radius: 4px;
-            background: #f8f9fa;
-            max-width: 500px;
-        }
-
-        #title:focus {
-            outline: 2px solid #1a73e8;
-            background: #fff;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .blog-select {
-            padding: 8px 12px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 14px;
-            background: #fff;
-            cursor: pointer;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: #1a73e8;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1557b0;
-        }
-
-        .btn-secondary {
-            background: #fff;
-            color: #5f6368;
-            border: 1px solid #dadce0;
-        }
-
-        .btn-secondary:hover {
-            background: #f8f9fa;
-        }
-
-        /* Toolbar - Flat & Minimal */
-        .toolbar {
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 8px 20px;
-            display: flex;
-            gap: 4px;
-            overflow-x: auto;
-        }
-
-        .toolbar button {
-            background: transparent;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #5f6368;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .toolbar button:hover {
-            background: #f1f3f4;
-        }
-
-        .toolbar button:active {
-            background: #e8eaed;
-        }
-
-        .toolbar-divider {
-            width: 1px;
-            background: #e0e0e0;
-            margin: 0 4px;
-        }
-
-        /* Editor Area - Full Width */
-        .editor-container {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .editor-wrapper {
-            flex: 1;
-            overflow-y: auto;
-            padding: 40px 20px;
-            background: #fff;
-        }
-
-        #editor {
-            max-width: 900px;
-            margin: 0 auto;
-            min-height: calc(100vh - 200px);
-            outline: none;
-            font-size: 16px;
-            line-height: 1.6;
-            color: #212529;
-        }
-
-        #editor:empty:before {
-            content: 'Start writing...';
-            color: #9aa0a6;
-        }
-        
-        #editor:focus:before {
-            content: '';
-        }
-
-        /* Table Styles in Editor */
-        #editor table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: #fff;
-        }
-
-        #editor table th,
-        #editor table td {
-            border: 1px solid #dadce0;
-            padding: 12px;
-            text-align: left;
-            min-width: 100px;
-        }
-
-        #editor table th {
-            background: #f8f9fa;
-            font-weight: 600;
-        }
-
-        #editor table tr:hover {
-            background: #f8f9fa;
-        }
-
-        /* Editable cell focus */
-        #editor table td:focus,
-        #editor table th:focus {
-            outline: 2px solid #1a73e8;
-            background: #fff;
-        }
-
-        /* Images in Editor */
-        #editor img {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        /* Headings */
-        #editor h1, #editor h2, #editor h3, #editor h4 {
-            margin-top: 24px;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        #editor h1 { font-size: 32px; }
-        #editor h2 { font-size: 24px; }
-        #editor h3 { font-size: 20px; }
-        #editor h4 { font-size: 18px; }
-
-        /* Lists */
-        #editor ul, #editor ol {
-            margin: 16px 0;
-            padding-left: 24px;
-        }
-
-        #editor li {
-            margin: 8px 0;
-        }
-
-        /* Blockquote */
-        #editor blockquote {
-            border-left: 4px solid #1a73e8;
-            margin: 20px 0;
-            padding: 12px 20px;
-            background: #f8f9fa;
-            font-style: italic;
-        }
-
-        /* Code */
-        #editor code {
-            background: #f1f3f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-
-        #editor pre {
-            background: #f1f3f4;
-            padding: 16px;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 16px 0;
-        }
-
-        #editor pre code {
-            background: transparent;
-            padding: 0;
-        }
-
-        /* Links */
-        #editor a {
-            color: #1a73e8;
-            text-decoration: none;
-        }
-
-        #editor a:hover {
-            text-decoration: underline;
-        }
-
-        /* Status Messages */
-        .status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 4px;
-            font-size: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .status.success {
-            background: #0f9d58;
-            color: white;
-        }
-
-        .status.error {
-            background: #d93025;
-            color: white;
-        }
-
-        .status.info {
-            background: #1a73e8;
-            color: white;
-        }
-
-        /* Modal - Clean */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        }
-
-        .modal-header {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-        }
-        
-        .modal-body label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .header-left {
-                width: 100%;
-                flex-direction: column;
-            }
-
-            #title {
-                max-width: 100%;
-            }
-
-            .toolbar {
-                padding: 8px 10px;
-            }
-
-            .editor-wrapper {
-                padding: 20px 15px;
-            }
-
-            #editor {
-                font-size: 15px;
-            }
+        @media (max-width:768px){
+            .header{flex-direction:column;gap:10px;}
+            .header-left{width:100%;flex-direction:column;}
+            #title{max-width:100%;}
+            .toolbar{padding:8px 10px;}
+            .editor-wrapper{padding:20px 15px;}
+            #editor{font-size:15px;}
         }
     </style>
 </head>
 <body>
-    <!-- Minimal Header -->
+    <!-- Header -->
     <header class="header">
         <div class="header-left">
             <div class="logo">Blogger</div>
             <label for="title" class="hidden">Post Title</label>
-            <input type="text" id="title" placeholder="Post title" aria-label="Post title" />
+            <input type="text" id="title" placeholder="Post title" aria-label="Post title"/>
         </div>
         <div class="header-actions">
             <label for="blogSelect" class="hidden">Select Blog</label>
@@ -429,37 +165,37 @@
         </div>
     </header>
 
-    <!-- Flat Toolbar -->
+    <!-- Toolbar -->
     <div class="toolbar" role="toolbar" aria-label="Text formatting toolbar">
         <button onclick="execCmd('bold')" aria-label="Bold"><b>B</b></button>
         <button onclick="execCmd('italic')" aria-label="Italic"><i>I</i></button>
         <button onclick="execCmd('underline')" aria-label="Underline"><u>U</u></button>
         <button onclick="execCmd('strikeThrough')" aria-label="Strikethrough"><s>S</s></button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('formatBlock', 'h1')" aria-label="Heading 1">H1</button>
-        <button onclick="execCmd('formatBlock', 'h2')" aria-label="Heading 2">H2</button>
-        <button onclick="execCmd('formatBlock', 'h3')" aria-label="Heading 3">H3</button>
-        <button onclick="execCmd('formatBlock', 'p')" aria-label="Paragraph">P</button>
+        <button onclick="execCmd('formatBlock','h1')" aria-label="Heading 1">H1</button>
+        <button onclick="execCmd('formatBlock','h2')" aria-label="Heading 2">H2</button>
+        <button onclick="execCmd('formatBlock','h3')" aria-label="Heading 3">H3</button>
+        <button onclick="execCmd('formatBlock','p')" aria-label="Paragraph">P</button>
         <div class="toolbar-divider"></div>
         <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List"><span aria-hidden="true">•</span> List</button>
         <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List"><span aria-hidden="true">1.</span> List</button>
-        <button onclick="execCmd('formatBlock', 'blockquote')" aria-label="Quote"><span aria-hidden="true">"</span> Quote</button>
+        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote"><span aria-hidden="true">"</span> Quote</button>
         <div class="toolbar-divider"></div>
-        <button onclick="openModal('linkModal')" aria-label="Insert Link"><span aria-hidden="true">🔗</span> Link</button>
-        <button onclick="openModal('imageModal')" aria-label="Insert Image"><span aria-hidden="true">🖼️</span> Image</button>
-        <button onclick="openModal('tableModal')" aria-label="Insert Table"><span aria-hidden="true">📊</span> Table</button>
+        <button onclick="openModal('linkModal')" aria-label="Insert Link"><span aria-hidden="true">Link</span> Link</button>
+        <button onclick="openModal('imageModal')" aria-label="Insert Image"><span aria-hidden="true">Image</span> Image</button>
+        <button onclick="openModal('tableModal')" aria-label="Insert Table"><span aria-hidden="true">Table</span> Table</button>
         <div class="toolbar-divider"></div>
-        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting"><span aria-hidden="true">✕</span> Clear</button>
+        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting"><span aria-hidden="true">X</span> Clear</button>
     </div>
 
-    <!-- Visual Editor -->
+    <!-- Editor -->
     <main class="editor-container">
         <div class="editor-wrapper">
             <div id="editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Main content editor"></div>
         </div>
     </main>
 
-    <!-- Table Size Modal -->
+    <!-- Table Modal -->
     <div class="modal" id="tableModal" role="dialog" aria-modal="true" aria-labelledby="tableModalHeader">
         <div class="modal-content">
             <h2 class="modal-header" id="tableModalHeader">Insert Table</h2>
@@ -513,275 +249,176 @@
     <script>
         const CLIENT_ID = '942968999133-nuldtmg604hjfogobnpeaq55vhd0v4tr.apps.googleusercontent.com';
         const SCOPES = 'https://www.googleapis.com/auth/blogger';
-        
-        let accessToken = null;
-        let blogs = [];
-        let lastSelectionRange = null;
+        let accessToken = null, blogs = [], lastSelectionRange = null;
 
-        function loadGoogleAPI() {
-            const script = document.createElement('script');
-            script.src = 'https://accounts.google.com/gsi/client';
-            script.onload = initializeGoogleSignIn;
-            document.head.appendChild(script);
+        /* ---------- GOOGLE SIGN-IN ---------- */
+        function loadGoogleAPI(){
+            const s=document.createElement('script');
+            s.src='https://accounts.google.com/gsi/client';s.onload=initializeGoogleSignIn;
+            document.head.appendChild(s);
         }
-
-        function initializeGoogleSignIn() {
-            google.accounts.id.initialize({
-                client_id: CLIENT_ID,
-                callback: handleCredentialResponse
-            });
+        function initializeGoogleSignIn(){
+            google.accounts.id.initialize({client_id:CLIENT_ID,callback:()=>{} });
         }
-
-        function signIn() {
-            const client = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID,
-                scope: SCOPES,
-                callback: (response) => {
-                    if (response.access_token) {
-                        accessToken = response.access_token;
-                        onSignIn();
-                    }
-                },
+        function signIn(){
+            const client=google.accounts.oauth2.initTokenClient({
+                client_id:CLIENT_ID,scope:SCOPES,
+                callback:r=>{if(r.access_token){accessToken=r.access_token;onSignIn();}}
             });
             client.requestAccessToken();
         }
-
-        function handleCredentialResponse(response) {}
-
-        async function onSignIn() {
-            document.getElementById('authBtn').textContent = 'Signed In';
-            document.getElementById('authBtn').disabled = true;
-            
-            await loadUserBlogs();
-            showStatus('Signed in successfully', 'success');
+        async function onSignIn(){
+            document.getElementById('authBtn').textContent='Signed In';
+            document.getElementById('authBtn').disabled=true;
+            await loadUserBlogs();showStatus('Signed in successfully','success');
         }
-
-        async function loadUserBlogs() {
-            try {
-                const response = await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs', {
-                    headers: { 'Authorization': `Bearer ${accessToken}` }
+        async function loadUserBlogs(){
+            try{
+                const r=await fetch('https://www.googleapis.com/blogger/v3/users/self/blogs',{
+                    headers:{'Authorization':`Bearer ${accessToken}`}
                 });
-                
-                const data = await response.json();
-                blogs = data.items || [];
-                
-                const blogSelect = document.getElementById('blogSelect');
-                blogSelect.innerHTML = '<option value="">Select blog...</option>';
-                
-                blogs.forEach(blog => {
-                    const option = document.createElement('option');
-                    option.value = blog.id;
-                    option.textContent = blog.name;
-                    blogSelect.appendChild(option);
-                });
-                
-                blogSelect.classList.remove('hidden');
-            } catch (error) {
-                showStatus('Error loading blogs', 'error');
+                const d=await r.json();blogs=d.items||[];
+                const sel=document.getElementById('blogSelect');
+                sel.innerHTML='<option value="">Select blog...</option>';
+                blogs.forEach(b=>{const o=document.createElement('option');
+                    o.value=b.id;o.textContent=b.name;sel.appendChild(o);});
+                sel.classList.remove('hidden');
+            }catch(e){showStatus('Error loading blogs','error');}
+        }
+
+        /* ---------- SELECTION HELPERS ---------- */
+        function saveSelection(){
+            const s=window.getSelection();
+            if(s.rangeCount>0) lastSelectionRange=s.getRangeAt(0);
+        }
+        function restoreSelection(){
+            if(lastSelectionRange){
+                const s=window.getSelection();s.removeAllRanges();s.addRange(lastSelectionRange);
             }
         }
 
-        function saveSelection() {
-            const selection = window.getSelection();
-            if (selection.rangeCount > 0) {
-                lastSelectionRange = selection.getRangeAt(0);
-            }
-        }
+        /* ---------- BASIC COMMANDS ---------- */
+        function execCmd(c,v=null){document.execCommand(c,false,v);document.getElementById('editor').focus();}
+        function insertHTML(h){restoreSelection();document.execCommand('insertHTML',false,h);}
 
-        function restoreSelection() {
-            if (lastSelectionRange) {
-                const selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(lastSelectionRange);
-            }
+        /* ---------- MODALS ---------- */
+        function openModal(id){
+            saveSelection();document.getElementById(id).classList.add('active');
+            const first=document.querySelector(`#${id} input, #${id} select`);
+            if(first) first.focus();
         }
-
-        // Editor Commands
-        function execCmd(command, value = null) {
-            document.execCommand(command, false, value);
+        function closeModal(){
+            document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active'));
             document.getElementById('editor').focus();
         }
 
-        function insertHTML(html) {
-            restoreSelection();
-            document.execCommand('insertHTML', false, html);
-        }
-        
-        // Modal Handling
-        function openModal(modalId) {
-            saveSelection();
-            const modal = document.getElementById(modalId);
-            modal.classList.add('active');
-            // Focus on the first input field in the modal for accessibility
-            const firstInput = modal.querySelector('input, select, textarea');
-            if (firstInput) {
-                firstInput.focus();
+        /* ---------- TABLE (responsive + dark-mode ready) ---------- */
+        function createTable(){
+            const rows=parseInt(document.getElementById('tableRows').value);
+            const cols=parseInt(document.getElementById('tableCols').value);
+            if(isNaN(rows)||isNaN(cols)||rows<1||cols<1){showStatus('Invalid table size','error');return;}
+            let html='<div class="responsive-table"><table><thead><tr>';
+            for(let i=0;i<cols;i++) html+=`<th contenteditable="true">Header ${i+1}</th>`;
+            html+='</tr></thead><tbody>';
+            for(let i=0;i<rows;i++){
+                html+='<tr>';
+                for(let j=0;j<cols;j++) html+='<td contenteditable="true">Data</td>';
+                html+='</tr>';
             }
-        }
-        
-        function closeModal() {
-            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-            document.getElementById('editor').focus();
+            html+='</tbody></table></div><p><br></p>';
+            insertHTML(html);closeModal();
         }
 
-        // Insert Table
-        function createTable() {
-            const rows = parseInt(document.getElementById('tableRows').value);
-            const cols = parseInt(document.getElementById('tableCols').value);
-            
-            if (isNaN(rows) || isNaN(cols) || rows < 1 || cols < 1) {
-                showStatus('Invalid table size', 'error');
-                return;
-            }
-
-            let table = '<table><thead><tr>';
-            for (let i = 0; i < cols; i++) table += '<th contenteditable="true">Header ' + (i + 1) + '</th>';
-            table += '</tr></thead><tbody>';
-            for (let i = 0; i < rows; i++) {
-                table += '<tr>';
-                for (let j = 0; j < cols; j++) table += '<td contenteditable="true">Data</td>';
-                table += '</tr>';
-            }
-            table += '</tbody></table><p><br></p>'; // Add a paragraph after for easier editing
-            
-            insertHTML(table);
+        /* ---------- LINK & IMAGE ---------- */
+        function createLink(){
+            const text=document.getElementById('linkText').value;
+            const url=document.getElementById('linkUrl').value;
+            if(!url){showStatus('Please enter a URL','error');return;}
+            insertHTML(`<a href="${url}">${text||url}</a>`);closeModal();
+        }
+        function createImage(){
+            const url=document.getElementById('imageUrl').value;
+            const alt=document.getElementById('imageAlt').value;
+            if(!url){showStatus('Please enter an image URL','error');return;}
+            insertHTML(`<img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;"><p><br></p>`);
             closeModal();
         }
 
-        // Insert Link
-        function createLink() {
-            const text = document.getElementById('linkText').value;
-            const url = document.getElementById('linkUrl').value;
-            
-            if (!url) {
-                showStatus('Please enter a URL', 'error');
-                return;
-            }
-            
-            const link = `<a href="${url}">${text || url}</a>`;
-            insertHTML(link);
-            closeModal();
-        }
-
-        // Insert Image
-        function createImage() {
-            const url = document.getElementById('imageUrl').value;
-            const alt = document.getElementById('imageAlt').value;
-            
-            if (!url) {
-                showStatus('Please enter an image URL', 'error');
-                return;
-            }
-            
-            const img = `<img src="${url}" alt="${alt || 'Image'}" style="max-width:100%;height:auto;"><p><br></p>`;
-            insertHTML(img);
-            closeModal();
-        }
-        
-        // Publish/Draft
-        async function publish() {
-            await publishPost(false);
-        }
-
-        async function saveDraft() {
-            await publishPost(true);
-        }
-
-        async function publishPost(isDraft) {
-            const title = document.getElementById('title').value.trim();
-            const content = document.getElementById('editor').innerHTML.trim();
-            const blogId = document.getElementById('blogSelect').value;
-
-            if (!title || !content) {
-                showStatus('Please enter title and content', 'error');
-                return;
-            }
-            if (!blogId) {
-                showStatus('Please select a blog', 'error');
-                return;
-            }
-            if (!accessToken) {
-                showStatus('Please sign in first', 'error');
-                return;
-            }
-
-            const post = {
-                kind: 'blogger#post',
-                blog: { id: blogId },
-                title: title,
-                content: formatForBlogger(content)
-            };
-
-            try {
-                const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${isDraft ? '?isDraft=true' : ''}`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(post)
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    showStatus(isDraft ? 'Saved as draft' : 'Published successfully!', 'success');
-                    if (!isDraft && result.url) {
-                        setTimeout(() => window.open(result.url, '_blank'), 1000);
-                    }
-                } else {
-                    const errorData = await response.json();
-                    showStatus(`Failed to publish: ${errorData.error.message}`, 'error');
+        /* ---------- PUBLISH / DRAFT ---------- */
+        async function publish(){await publishPost(false);}
+        async function saveDraft(){await publishPost(true);}
+        async function publishPost(isDraft){
+            const title=document.getElementById('title').value.trim();
+            const content=document.getElementById('editor').innerHTML.trim();
+            const blogId=document.getElementById('blogSelect').value;
+            if(!title||!content){showStatus('Title & content required','error');return;}
+            if(!blogId){showStatus('Select a blog','error');return;}
+            if(!accessToken){showStatus('Sign in first','error');return;}
+            const post={kind:'blogger#post',blog:{id:blogId},title:title,content:formatForBlogger(content)};
+            try{
+                const url=`https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${isDraft?'?isDraft=true':''}`;
+                const r=await fetch(url,{method:'POST',headers:{
+                    'Authorization':`Bearer ${accessToken}`,'Content-Type':'application/json'
+                },body:JSON.stringify(post)});
+                if(r.ok){
+                    const res=await r.json();
+                    showStatus(isDraft?'Saved as draft':'Published!','success');
+                    if(!isDraft && res.url) setTimeout(()=>window.open(res.url,'_blank'),1000);
+                }else{
+                    const e=await r.json();showStatus(`Failed: ${e.error.message}`,'error');
                 }
-            } catch (error) {
-                showStatus('Error: ' + error.message, 'error');
-            }
+            }catch(e){showStatus('Error: '+e.message,'error');}
         }
 
-        function formatForBlogger(html) {
-            // This function can be expanded to clean up contenteditable artifacts if needed.
-            // For now, it just wraps content for responsiveness.
-            let formatted = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;">${html}</div>`;
-            return formatted;
+        /* ---------- INJECT RESPONSIVE + DARK-MODE CSS INTO EVERY POST ---------- */
+        function formatForBlogger(html){
+            const tableCSS=`
+                <style>
+                    .responsive-table{overflow-x:auto;margin:20px 0;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.1);}
+                    .responsive-table table{width:100%;min-width:600px;border-collapse:collapse;font-size:15px;line-height:1.5;background:var(--bs-body-bg);}
+                    .responsive-table th{background:#f5f5f5;color:#333;font-weight:600;text-align:left;}
+                    .responsive-table th,.responsive-table td{padding:12px 14px;border:1px solid #ddd;word-wrap:break-word;max-width:300px;}
+                    .responsive-table tr:hover{background:#f9f9f9;}
+                    .responsive-table tr:nth-child(even){background:#fafafa;}
+                    .dark-mode .responsive-table table{background:#1a1a1a;color:#e0e0e0;}
+                    .dark-mode .responsive-table th{background:#2d2d2d !important;color:#fff !important;}
+                    .dark-mode .responsive-table td{border-color:#444 !important;}
+                    .dark-mode .responsive-table tr:hover{background:#2a2a2a !important;}
+                    .dark-mode .responsive-table tr:nth-child(even){background:#222;}
+                    @media(max-width:768px){
+                        .responsive-table table{font-size:14px;}
+                        .responsive-table th,.responsive-table td{padding:10px 8px;}
+                    }
+                </style>`;
+            const wrapped=html.replace(/<table/g,'<div class="responsive-table"><table')
+                              .replace(/<\/table>/g,'</table></div>');
+            return `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;">
+                        ${tableCSS}${wrapped}
+                    </div>`;
         }
 
-        function showStatus(message, type) {
-            const existing = document.querySelector('.status');
-            if (existing) existing.remove();
-            
-            const status = document.createElement('div');
-            status.className = `status ${type}`;
-            status.textContent = message;
-            // Make status messages accessible to screen readers
-            status.setAttribute('role', 'status');
-            status.setAttribute('aria-live', 'polite');
-            document.body.appendChild(status);
-            
-            setTimeout(() => status.remove(), 4000);
+        /* ---------- STATUS ---------- */
+        function showStatus(msg,type){
+            const ex=document.querySelector('.status');if(ex) ex.remove();
+            const s=document.createElement('div');s.className=`status ${type}`;
+            s.textContent=msg;s.setAttribute('role','status');s.setAttribute('aria-live','polite');
+            document.body.appendChild(s);
+            setTimeout(()=>s.remove(),4000);
         }
 
-        // --- Accessibility & Usability Event Listeners ---
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', loadGoogleAPI);
-
-        // Close modals on click outside or with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
+        /* ---------- DARK-MODE PREVIEW IN EDITOR (optional toggle) ---------- */
+        document.addEventListener('keydown',e=>{
+            if(e.ctrlKey && e.shiftKey && e.key==='D'){
+                document.body.classList.toggle('dark-mode');
             }
         });
 
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-        });
-
-        // Save selection whenever it changes in the editor
-        document.getElementById('editor').addEventListener('keyup', saveSelection);
-        document.getElementById('editor').addEventListener('mouseup', saveSelection);
-
+        /* ---------- INIT ---------- */
+        document.addEventListener('DOMContentLoaded',loadGoogleAPI);
+        document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
+        document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',ev=>{if(ev.target===m) closeModal();}));
+        document.getElementById('editor').addEventListener('keyup',saveSelection);
+        document.getElementById('editor').addEventListener('mouseup',saveSelection);
     </script>
 </body>
 </html>
