@@ -167,13 +167,14 @@
             content: '';
         }
 
-        /* FIXED: Proper table styling in editor */
+        /* FIXED: Consistent table styling for light AND dark mode */
         #editor table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
             background: #fff;
             table-layout: fixed;
+            border: 2px solid #dadce0;
         }
 
         #editor table th,
@@ -183,18 +184,19 @@
             text-align: left;
             min-width: 100px;
             position: relative;
+            background: #fff;
         }
 
         #editor table th {
             background: #f8f9fa;
             font-weight: 600;
+            color: #202124;
         }
 
-        #editor table tr:hover {
+        #editor table tr:hover td {
             background: #f8f9fa;
         }
 
-        /* Make cells properly editable */
         #editor table td[contenteditable="true"],
         #editor table th[contenteditable="true"] {
             cursor: text;
@@ -318,6 +320,7 @@
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 16px;
+            color: #202124;
         }
 
         .modal-body {
@@ -329,6 +332,7 @@
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 6px;
+            color: #5f6368;
         }
 
         .modal-input {
@@ -338,6 +342,12 @@
             border-radius: 4px;
             font-size: 14px;
             margin-bottom: 12px;
+            color: #202124;
+            background: #fff;
+        }
+
+        .modal-input:focus {
+            outline: 2px solid #1a73e8;
         }
 
         .modal-actions {
@@ -406,14 +416,14 @@
         <div class="modal-content">
             <div class="modal-header">Insert Table</div>
             <div class="modal-body">
-                <label>Rows</label>
+                <label for="tableRows">Number of Rows</label>
                 <input type="number" id="tableRows" class="modal-input" min="1" max="20" value="3">
-                <label>Columns</label>
+                <label for="tableCols">Number of Columns</label>
                 <input type="number" id="tableCols" class="modal-input" min="1" max="10" value="3">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createTable()">Insert</button>
+                <button class="btn btn-primary" onclick="createTable()">Insert Table</button>
             </div>
         </div>
     </div>
@@ -422,14 +432,14 @@
         <div class="modal-content">
             <div class="modal-header">Insert Link</div>
             <div class="modal-body">
-                <label>Link text</label>
-                <input type="text" id="linkText" class="modal-input">
-                <label>URL</label>
-                <input type="url" id="linkUrl" class="modal-input">
+                <label for="linkText">Link text</label>
+                <input type="text" id="linkText" class="modal-input" placeholder="Enter text">
+                <label for="linkUrl">URL</label>
+                <input type="url" id="linkUrl" class="modal-input" placeholder="https://example.com">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createLink()">Insert</button>
+                <button class="btn btn-primary" onclick="createLink()">Insert Link</button>
             </div>
         </div>
     </div>
@@ -438,14 +448,14 @@
         <div class="modal-content">
             <div class="modal-header">Insert Image</div>
             <div class="modal-body">
-                <label>Image URL</label>
-                <input type="url" id="imageUrl" class="modal-input">
-                <label>Alt text</label>
-                <input type="text" id="imageAlt" class="modal-input">
+                <label for="imageUrl">Image URL</label>
+                <input type="url" id="imageUrl" class="modal-input" placeholder="https://example.com/image.jpg">
+                <label for="imageAlt">Alt text (optional)</label>
+                <input type="text" id="imageAlt" class="modal-input" placeholder="Describe the image">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createImage()">Insert</button>
+                <button class="btn btn-primary" onclick="createImage()">Insert Image</button>
             </div>
         </div>
     </div>
@@ -540,35 +550,69 @@
 
         function openModal(modalId) {
             saveSelection();
+            
+            // Reset input values when opening modal
+            if (modalId === 'tableModal') {
+                document.getElementById('tableRows').value = '3';
+                document.getElementById('tableCols').value = '3';
+            } else if (modalId === 'linkModal') {
+                document.getElementById('linkText').value = '';
+                document.getElementById('linkUrl').value = '';
+            } else if (modalId === 'imageModal') {
+                document.getElementById('imageUrl').value = '';
+                document.getElementById('imageAlt').value = '';
+            }
+            
             document.getElementById(modalId).classList.add('active');
-            const firstInput = document.querySelector(`#${modalId} input`);
-            if (firstInput) firstInput.focus();
+            
+            // Focus first input
+            setTimeout(() => {
+                const firstInput = document.querySelector(`#${modalId} input`);
+                if (firstInput) firstInput.focus();
+            }, 100);
         }
 
         function closeModal() {
             document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            restoreSelection();
             document.getElementById('editor').focus();
         }
 
         function createTable() {
-            const rows = parseInt(document.getElementById('tableRows').value);
-            const cols = parseInt(document.getElementById('tableCols').value);
+            const rowsInput = document.getElementById('tableRows');
+            const colsInput = document.getElementById('tableCols');
             
-            if (!rows || !cols || rows < 1 || cols < 1) {
-                showStatus('Invalid table size', 'error');
+            const rows = parseInt(rowsInput.value);
+            const cols = parseInt(colsInput.value);
+            
+            // Validation
+            if (isNaN(rows) || isNaN(cols)) {
+                showStatus('Please enter valid numbers', 'error');
+                return;
+            }
+            
+            if (rows < 1 || rows > 20) {
+                showStatus('Rows must be between 1 and 20', 'error');
+                return;
+            }
+            
+            if (cols < 1 || cols > 10) {
+                showStatus('Columns must be between 1 and 10', 'error');
                 return;
             }
 
-            let html = '<table><thead><tr>';
+            // Create table HTML with explicit styling
+            let html = '<table style="width:100%;border-collapse:collapse;margin:20px 0;background:#fff;border:2px solid #dadce0;"><thead><tr>';
+            
             for (let i = 0; i < cols; i++) {
-                html += `<th contenteditable="true">Header ${i + 1}</th>`;
+                html += `<th contenteditable="true" style="border:1px solid #dadce0;padding:12px;background:#f8f9fa;font-weight:600;color:#202124;">Header ${i + 1}</th>`;
             }
             html += '</tr></thead><tbody>';
             
             for (let i = 0; i < rows; i++) {
                 html += '<tr>';
                 for (let j = 0; j < cols; j++) {
-                    html += '<td contenteditable="true">Cell</td>';
+                    html += `<td contenteditable="true" style="border:1px solid #dadce0;padding:12px;background:#fff;color:#202124;">Cell</td>`;
                 }
                 html += '</tr>';
             }
@@ -577,12 +621,12 @@
             restoreSelection();
             document.execCommand('insertHTML', false, html);
             closeModal();
-            showStatus('Table inserted - click cells to edit', 'success');
+            showStatus('Table inserted! Click cells to edit', 'success');
         }
 
         function createLink() {
-            const text = document.getElementById('linkText').value;
-            const url = document.getElementById('linkUrl').value;
+            const text = document.getElementById('linkText').value.trim();
+            const url = document.getElementById('linkUrl').value.trim();
             
             if (!url) {
                 showStatus('Please enter a URL', 'error');
@@ -590,13 +634,13 @@
             }
             
             restoreSelection();
-            document.execCommand('insertHTML', false, `<a href="${url}">${text || url}</a>`);
+            document.execCommand('insertHTML', false, `<a href="${url}" style="color:#1a73e8;">${text || url}</a>`);
             closeModal();
         }
 
         function createImage() {
-            const url = document.getElementById('imageUrl').value;
-            const alt = document.getElementById('imageAlt').value;
+            const url = document.getElementById('imageUrl').value.trim();
+            const alt = document.getElementById('imageAlt').value.trim();
             
             if (!url) {
                 showStatus('Please enter an image URL', 'error');
@@ -604,7 +648,7 @@
             }
             
             restoreSelection();
-            document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt || 'Image'}"><p><br></p>`);
+            document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt || 'Image'}" style="max-width:100%;height:auto;display:block;margin:20px 0;"><p><br></p>`);
             closeModal();
         }
 
@@ -652,12 +696,13 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    showStatus(isDraft ? 'Saved as draft' : 'Published successfully!', 'success');
+                    showStatus(isDraft ? 'Saved as draft ✓' : 'Published successfully! ✓', 'success');
                     if (!isDraft && result.url) {
                         setTimeout(() => window.open(result.url, '_blank'), 1000);
                     }
                 } else {
-                    showStatus('Failed to publish', 'error');
+                    const errorData = await response.json();
+                    showStatus('Failed: ' + (errorData.error.message || 'Unknown error'), 'error');
                 }
             } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
@@ -667,17 +712,15 @@
         function formatForBlogger(html) {
             let formatted = html;
             
-            // Fix table styling for blog
-            formatted = formatted.replace(/<table>/g, '<div style="overflow-x:auto;margin:20px 0"><table style="width:100%;border-collapse:collapse;">');
-            formatted = formatted.replace(/<\/table>/g, '</table></div>');
-            formatted = formatted.replace(/<th([^>]*)>/g, '<th$1 style="border:1px solid #dadce0;padding:12px;background:#f8f9fa;font-weight:600;text-align:left;">');
-            formatted = formatted.replace(/<td([^>]*)>/g, '<td$1 style="border:1px solid #dadce0;padding:12px;text-align:left;">');
-            
-            // Remove contenteditable
+            // Remove contenteditable attributes
             formatted = formatted.replace(/\scontenteditable="true"/g, '');
             
+            // Ensure table styling is preserved
+            formatted = formatted.replace(/<table>/g, '<div style="overflow-x:auto;margin:20px 0"><table style="width:100%;border-collapse:collapse;border:2px solid #dadce0;background:#fff;">');
+            formatted = formatted.replace(/<\/table>/g, '</table></div>');
+            
             // Wrap in responsive container
-            formatted = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;line-height:1.6;">${formatted}</div>`;
+            formatted = `<div style="max-width:100%;word-wrap:break-word;overflow-wrap:break-word;line-height:1.6;color:#202124;">${formatted}</div>`;
             
             return formatted;
         }
@@ -695,7 +738,13 @@
         }
 
         // Event listeners
-        document.addEventListener('DOMContentLoaded', loadGoogleAPI);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGoogleAPI();
+            
+            // Initialize input values
+            document.getElementById('tableRows').value = '3';
+            document.getElementById('tableCols').value = '3';
+        });
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
@@ -709,6 +758,7 @@
 
         document.getElementById('editor').addEventListener('keyup', saveSelection);
         document.getElementById('editor').addEventListener('mouseup', saveSelection);
+        document.getElementById('editor').addEventListener('focus', saveSelection);
     </script>
 </body>
 </html>
