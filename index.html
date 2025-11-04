@@ -397,9 +397,9 @@
             const url=document.getElementById('imageUrl').value;
             const alt=document.getElementById('imageAlt').value;
             if(!url){showStatus('Please enter an image URL','error');return;}
-            // Wrap image in a link so it's clickable on the live site
-            const imgHTML=`<a href="${url}" target="_blank" rel="noopener noreferrer" style="display:inline-block;">
-                <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;">
+            // Wrap image in a link that opens the image directly in same tab
+            const imgHTML=`<a href="${url}" style="display:inline-block;text-decoration:none;">
+                <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;border-radius:4px;">
             </a><p><br></p>`;
             insertHTML(imgHTML);
             closeModal();
