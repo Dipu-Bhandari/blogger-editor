@@ -157,7 +157,7 @@
         </div>
         <div class="header-actions">
             <label for="blogSelect" class="hidden">Select Blog</label>
-            <select id="blogSelect" class="blog-select hidden">
+            <select id="blogSelect" class="blog-select hidden" aria-label="Select your blog">
                 <option value="">Select blog...</option>
             </select>
             <button class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
@@ -168,42 +168,44 @@
 
     <!-- Toolbar -->
     <div class="toolbar" role="toolbar" aria-label="Text formatting toolbar">
-        <button onclick="execCmd('bold')" aria-label="Bold"><b>B</b></button>
-        <button onclick="execCmd('italic')" aria-label="Italic"><i>I</i></button>
-        <button onclick="execCmd('underline')" aria-label="Underline"><u>U</u></button>
-        <button onclick="execCmd('strikeThrough')" aria-label="Strikethrough"><s>S</s></button>
+        <button onclick="execCmd('bold')" aria-label="Bold (Ctrl+B)" title="Bold (Ctrl+B)"><b>B</b></button>
+        <button onclick="execCmd('italic')" aria-label="Italic (Ctrl+I)" title="Italic (Ctrl+I)"><i>I</i></button>
+        <button onclick="execCmd('underline')" aria-label="Underline (Ctrl+U)" title="Underline (Ctrl+U)"><u>U</u></button>
+        <button onclick="execCmd('strikeThrough')" aria-label="Strikethrough" title="Strikethrough"><s>S</s></button>
         <div class="toolbar-divider"></div>
 
-        <button onclick="execCmd('formatBlock','h1')" aria-label="Heading 1">H1</button>
-        <button onclick="execCmd('formatBlock','h2')" aria-label="Heading 2">H2</button>
-        <button onclick="execCmd('formatBlock','h3')" aria-label="Heading 3">H3</button>
-        <button onclick="execCmd('formatBlock','p')" aria-label="Paragraph">P</button>
+        <button onclick="execCmd('formatBlock','h1')" aria-label="Heading 1" title="Heading 1">H1</button>
+        <button onclick="execCmd('formatBlock','h2')" aria-label="Heading 2" title="Heading 2">H2</button>
+        <button onclick="execCmd('formatBlock','h3')" aria-label="Heading 3" title="Heading 3">H3</button>
+        <button onclick="execCmd('formatBlock','p')" aria-label="Paragraph" title="Paragraph">P</button>
         <div class="toolbar-divider"></div>
 
-        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List">• List</button>
-        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List">1. List</button>
-        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote">" Quote</button>
+        <button onclick="execCmd('insertUnorderedList')" aria-label="Bullet List" title="Bullet List">• List</button>
+        <button onclick="execCmd('insertOrderedList')" aria-label="Numbered List" title="Numbered List">1. List</button>
+        <button onclick="execCmd('formatBlock','blockquote')" aria-label="Quote" title="Quote">" Quote</button>
         <div class="toolbar-divider"></div>
 
         <!-- Alignment Buttons -->
-        <button id="alignLeft" onclick="alignText('justifyLeft')" aria-label="Align Left">Left</button>
-        <button id="alignCenter" onclick="alignText('justifyCenter')" aria-label="Align Center">Center</button>
-        <button id="alignRight" onclick="alignText('justifyRight')" aria-label="Align Right">Right</button>
-        <button id="alignJustify" onclick="alignText('justifyFull')" aria-label="Justify">Justify</button>
+        <button id="alignLeft" onclick="alignText('justifyLeft')" aria-label="Align Left (Ctrl+Shift+L)" title="Align Left (Ctrl+Shift+L)">Left</button>
+        <button id="alignCenter" onclick="alignText('justifyCenter')" aria-label="Align Center (Ctrl+Shift+C)" title="Align Center (Ctrl+Shift+C)">Center</button>
+        <button id="alignRight" onclick="alignText('justifyRight')" aria-label="Align Right (Ctrl+Shift+R)" title="Align Right (Ctrl+Shift+R)">Right</button>
+        <button id="alignJustify" onclick="alignText('justifyFull')" aria-label="Justify (Ctrl+Shift+J)" title="Justify (Ctrl+Shift+J)">Justify</button>
         <div class="toolbar-divider"></div>
 
-        <button onclick="openModal('linkModal')" aria-label="Insert Link">Link</button>
-        <button onclick="openModal('imageModal')" aria-label="Insert Image">Image</button>
-        <button onclick="openModal('tableModal')" aria-label="Insert Table">Table</button>
+        <button onclick="openModal('linkModal')" aria-label="Insert Link" title="Insert Link">Link</button>
+        <button onclick="openModal('imageModal')" aria-label="Insert Image" title="Insert Image">Image</button>
+        <button onclick="openModal('tableModal')" aria-label="Insert Table" title="Insert Table">Table</button>
         <div class="toolbar-divider"></div>
 
-        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting">X Clear</button>
+        <button onclick="execCmd('removeFormat')" aria-label="Clear Formatting" title="Clear Formatting">X Clear</button>
     </div>
 
     <!-- Editor -->
     <main class="editor-container">
         <div class="editor-wrapper">
-            <div id="editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Main content editor"></div>
+            <div id="editor" contenteditable="true" role="textbox" aria-multiline="true" 
+                 aria-label="Main content editor. Use toolbar buttons or keyboard shortcuts for formatting."
+                 spellcheck="true"></div>
         </div>
     </main>
 
@@ -213,9 +215,9 @@
             <h2 class="modal-header" id="tableModalHeader">Insert Table</h2>
             <div class="modal-body">
                 <label for="tableRows">Rows</label>
-                <input type="number" id="tableRows" class="modal-input" placeholder="e.g., 3" min="1" max="20" value="3">
+                <input type="number" id="tableRows" class="modal-input" placeholder="e.g., 3" min="1" max="20" value="3" aria-describedby="tableRowsDesc">
                 <label for="tableCols">Columns</label>
-                <input type="number" id="tableCols" class="modal-input" placeholder="e.g., 3" min="1" max="10" value="3">
+                <input type="number" id="tableCols" class="modal-input" placeholder="e.g., 3" min="1" max="10" value="3" aria-describedby="tableColsDesc">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -230,9 +232,9 @@
             <h2 class="modal-header" id="linkModalHeader">Insert Link</h2>
             <div class="modal-body">
                 <label for="linkText">Link text</label>
-                <input type="text" id="linkText" class="modal-input" placeholder="Link text">
+                <input type="text" id="linkText" class="modal-input" placeholder="Link text" aria-describedby="linkTextDesc">
                 <label for="linkUrl">URL</label>
-                <input type="url" id="linkUrl" class="modal-input" placeholder="https://example.com">
+                <input type="url" id="linkUrl" class="modal-input" placeholder="https://example.com" aria-describedby="linkUrlDesc">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -247,9 +249,9 @@
             <h2 class="modal-header" id="imageModalHeader">Insert Image</h2>
             <div class="modal-body">
                 <label for="imageUrl">Image URL</label>
-                <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL">
+                <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL" aria-describedby="imageUrlDesc">
                 <label for="imageAlt">Alt text (for accessibility)</label>
-                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill">
+                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill" aria-describedby="imageAltDesc">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -345,12 +347,25 @@
 
         /* ---------- MODALS ---------- */
         function openModal(id){
-            saveSelection();document.getElementById(id).classList.add('active');
-            const first=document.querySelector(`#${id} input, #${id} select`);
-            if(first) first.focus();
+            saveSelection();
+            const modal = document.getElementById(id);
+            modal.classList.add('active');
+            // Focus first input and select text if present
+            const first=modal.querySelector('input, select');
+            if(first) {
+                setTimeout(() => {
+                    first.focus();
+                    if(first.type === 'text' || first.type === 'url') first.select();
+                }, 100);
+            }
+            // Trap focus within modal
+            modal.setAttribute('aria-hidden', 'false');
         }
         function closeModal(){
-            document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active'));
+            document.querySelectorAll('.modal.active').forEach(m=>{
+                m.classList.remove('active');
+                m.setAttribute('aria-hidden', 'true');
+            });
             document.getElementById('editor').focus();
         }
 
@@ -376,13 +391,17 @@
             const text=document.getElementById('linkText').value;
             const url=document.getElementById('linkUrl').value;
             if(!url){showStatus('Please enter a URL','error');return;}
-            insertHTML(`<a href="${url}">${text||url}</a>`);closeModal();
+            insertHTML(`<a href="${url}" target="_blank" rel="noopener noreferrer">${text||url}</a>`);closeModal();
         }
         function createImage(){
             const url=document.getElementById('imageUrl').value;
             const alt=document.getElementById('imageAlt').value;
             if(!url){showStatus('Please enter an image URL','error');return;}
-            insertHTML(`<img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;"><p><br></p>`);
+            // Wrap image in a link so it's clickable on the live site
+            const imgHTML=`<a href="${url}" target="_blank" rel="noopener noreferrer" style="display:inline-block;">
+                <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;">
+            </a><p><br></p>`;
+            insertHTML(imgHTML);
             closeModal();
         }
 
@@ -452,6 +471,20 @@
         document.addEventListener('DOMContentLoaded',()=>{
             loadGoogleAPI();
             updateAlignmentButtons();
+            // Initialize modals as hidden for screen readers
+            document.querySelectorAll('.modal').forEach(m=>m.setAttribute('aria-hidden', 'true'));
+            // Add Enter key support for modal inputs
+            document.querySelectorAll('.modal input').forEach(input => {
+                input.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const modal = input.closest('.modal');
+                        if (modal.id === 'linkModal') createLink();
+                        else if (modal.id === 'imageModal') createImage();
+                        else if (modal.id === 'tableModal') createTable();
+                    }
+                });
+            });
         });
         document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
         document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',ev=>{if(ev.target===m) closeModal();}));
