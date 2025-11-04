@@ -248,19 +248,10 @@
         <div class="modal-content">
             <h2 class="modal-header" id="imageModalHeader">Insert Image</h2>
             <div class="modal-body">
-                <label for="imageUpload">Upload Image</label>
-                <input type="file" id="imageUpload" class="modal-input" accept="image/*" aria-describedby="imageUploadDesc" style="padding:6px;">
-                <div style="text-align:center;margin:10px 0;color:#5f6368;font-size:13px;">— OR —</div>
                 <label for="imageUrl">Image URL</label>
-                <input type="url" id="imageUrl" class="modal-input" placeholder="https://example.com/image.jpg" aria-describedby="imageUrlDesc">
+                <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL" aria-describedby="imageUrlDesc">
                 <label for="imageAlt">Alt text (for accessibility)</label>
                 <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill" aria-describedby="imageAltDesc">
-                <div id="uploadProgress" style="display:none;margin-top:10px;">
-                    <div style="background:#e0e0e0;border-radius:4px;height:6px;overflow:hidden;">
-                        <div id="uploadBar" style="background:#1a73e8;height:100%;width:0%;transition:width 0.3s;"></div>
-                    </div>
-                    <div style="font-size:12px;color:#5f6368;margin-top:4px;text-align:center;" id="uploadStatus">Uploading...</div>
-                </div>
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -402,90 +393,16 @@
             if(!url){showStatus('Please enter a URL','error');return;}
             insertHTML(`<a href="${url}" target="_blank" rel="noopener noreferrer">${text||url}</a>`);closeModal();
         }
-        
-        async function createImage(){
-            const fileInput = document.getElementById('imageUpload');
-            const urlInput = document.getElementById('imageUrl');
-            const alt = document.getElementById('imageAlt').value;
-            
-            // Check if user uploaded a file
-            if(fileInput.files && fileInput.files[0]){
-                await uploadImageToImgur(fileInput.files[0], alt);
-            }
-            // Otherwise use URL
-            else if(urlInput.value){
-                const url = urlInput.value;
-                const imgHTML=`<a href="${url}" style="display:inline-block;text-decoration:none;">
-                    <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;border-radius:4px;">
-                </a><p><br></p>`;
-                insertHTML(imgHTML);
-                closeModal();
-                clearImageModal();
-            }
-            else{
-                showStatus('Please upload an image or enter a URL','error');
-            }
-        }
-        
-        async function uploadImageToImgur(file, alt){
-            if(!file.type.startsWith('image/')){
-                showStatus('Please select an image file','error');
-                return;
-            }
-            
-            // Show progress
-            document.getElementById('uploadProgress').style.display = 'block';
-            document.getElementById('uploadBar').style.width = '30%';
-            document.getElementById('uploadStatus').textContent = 'Uploading...';
-            
-            try {
-                const formData = new FormData();
-                formData.append('image', file);
-                
-                const response = await fetch('https://api.imgur.com/3/image', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Client-ID 534c2a19dbce38c'
-                    },
-                    body: formData
-                });
-                
-                document.getElementById('uploadBar').style.width = '70%';
-                
-                if(!response.ok){
-                    throw new Error('Upload failed');
-                }
-                
-                const data = await response.json();
-                document.getElementById('uploadBar').style.width = '100%';
-                document.getElementById('uploadStatus').textContent = 'Upload complete!';
-                
-                if(data.success && data.data.link){
-                    const url = data.data.link;
-                    const imgHTML=`<a href="${url}" style="display:inline-block;text-decoration:none;">
-                        <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;border-radius:4px;">
-                    </a><p><br></p>`;
-                    insertHTML(imgHTML);
-                    showStatus('Image uploaded successfully!','success');
-                    closeModal();
-                    clearImageModal();
-                } else {
-                    throw new Error('Invalid response from server');
-                }
-            } catch(error){
-                document.getElementById('uploadBar').style.width = '0%';
-                document.getElementById('uploadProgress').style.display = 'none';
-                showStatus('Upload failed. Please try again or use a URL.','error');
-                console.error('Upload error:', error);
-            }
-        }
-        
-        function clearImageModal(){
-            document.getElementById('imageUpload').value = '';
-            document.getElementById('imageUrl').value = '';
-            document.getElementById('imageAlt').value = '';
-            document.getElementById('uploadProgress').style.display = 'none';
-            document.getElementById('uploadBar').style.width = '0%';
+        function createImage(){
+            const url=document.getElementById('imageUrl').value;
+            const alt=document.getElementById('imageAlt').value;
+            if(!url){showStatus('Please enter an image URL','error');return;}
+            // Wrap image in a link that opens the image directly in same tab
+            const imgHTML=`<a href="${url}" style="display:inline-block;text-decoration:none;">
+                <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;border-radius:4px;">
+            </a><p><br></p>`;
+            insertHTML(imgHTML);
+            closeModal();
         }
 
         /* ---------- PUBLISH / DRAFT ---------- */
