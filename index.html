@@ -215,9 +215,9 @@
             <h2 class="modal-header" id="tableModalHeader">Insert Table</h2>
             <div class="modal-body">
                 <label for="tableRows">Rows</label>
-                <input type="number" id="tableRows" class="modal-input" placeholder="e.g., 3" min="1" max="20" value="3" aria-describedby="tableRowsDesc">
+                <input type="number" id="tableRows" class="modal-input" placeholder="e.g., 3" min="1" max="20" value="3">
                 <label for="tableCols">Columns</label>
-                <input type="number" id="tableCols" class="modal-input" placeholder="e.g., 3" min="1" max="10" value="3" aria-describedby="tableColsDesc">
+                <input type="number" id="tableCols" class="modal-input" placeholder="e.g., 3" min="1" max="10" value="3">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -232,9 +232,9 @@
             <h2 class="modal-header" id="linkModalHeader">Insert Link</h2>
             <div class="modal-body">
                 <label for="linkText">Link text</label>
-                <input type="text" id="linkText" class="modal-input" placeholder="Link text" aria-describedby="linkTextDesc">
+                <input type="text" id="linkText" class="modal-input" placeholder="Link text">
                 <label for="linkUrl">URL</label>
-                <input type="url" id="linkUrl" class="modal-input" placeholder="https://example.com" aria-describedby="linkUrlDesc">
+                <input type="url" id="linkUrl" class="modal-input" placeholder="https://example.com">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -249,9 +249,9 @@
             <h2 class="modal-header" id="imageModalHeader">Insert Image</h2>
             <div class="modal-body">
                 <label for="imageUrl">Image URL</label>
-                <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL" aria-describedby="imageUrlDesc">
+                <input type="url" id="imageUrl" class="modal-input" placeholder="Image URL">
                 <label for="imageAlt">Alt text (for accessibility)</label>
-                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill" aria-describedby="imageAltDesc">
+                <input type="text" id="imageAlt" class="modal-input" placeholder="e.g., a cat sitting on a windowsill">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -335,30 +335,15 @@
             if (align) document.getElementById(align).classList.add('active');
         }
 
-        /* ---------- KEYBOARD SHORTCUTS FOR ALIGNMENT ---------- */
-        document.addEventListener('keydown', e => {
-            if (e.ctrlKey && e.shiftKey) {
-                if (e.key === 'L') { e.preventDefault(); alignText('justifyLeft'); }
-                else if (e.key === 'C') { e.preventDefault(); alignText('justifyCenter'); }
-                else if (e.key === 'R') { e.preventDefault(); alignText('justifyRight'); }
-                else if (e.key === 'J') { e.preventDefault(); alignText('justifyFull'); }
-            }
-        });
-
         /* ---------- MODALS ---------- */
         function openModal(id){
             saveSelection();
             const modal = document.getElementById(id);
             modal.classList.add('active');
-            // Focus first input and select text if present
             const first=modal.querySelector('input, select');
             if(first) {
-                setTimeout(() => {
-                    first.focus();
-                    if(first.type === 'text' || first.type === 'url') first.select();
-                }, 100);
+                setTimeout(() => { first.focus(); if(first.type==='text'||first.type==='url') first.select(); }, 100);
             }
-            // Trap focus within modal
             modal.setAttribute('aria-hidden', 'false');
         }
         function closeModal(){
@@ -369,7 +354,7 @@
             document.getElementById('editor').focus();
         }
 
-        /* ---------- TABLE (responsive + dark-mode ready) ---------- */
+        /* ---------- TABLE ---------- */
         function createTable(){
             const rows=parseInt(document.getElementById('tableRows').value);
             const cols=parseInt(document.getElementById('tableCols').value);
@@ -393,13 +378,14 @@
             if(!url){showStatus('Please enter a URL','error');return;}
             insertHTML(`<a href="${url}" target="_blank" rel="noopener noreferrer">${text||url}</a>`);closeModal();
         }
+
+        // ✅ Updated: Open images in the same tab
         function createImage(){
             const url=document.getElementById('imageUrl').value;
             const alt=document.getElementById('imageAlt').value;
             if(!url){showStatus('Please enter an image URL','error');return;}
-            // Wrap image in a link that opens the image directly in same tab
-            const imgHTML=`<a href="${url}" style="display:inline-block;text-decoration:none;">
-                <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;border-radius:4px;">
+            const imgHTML=`<a href="${url}" style="display:inline-block;">
+                <img src="${url}" alt="${alt||'Image'}" style="max-width:100%;height:auto;cursor:pointer;display:block;">
             </a><p><br></p>`;
             insertHTML(imgHTML);
             closeModal();
@@ -471,9 +457,7 @@
         document.addEventListener('DOMContentLoaded',()=>{
             loadGoogleAPI();
             updateAlignmentButtons();
-            // Initialize modals as hidden for screen readers
             document.querySelectorAll('.modal').forEach(m=>m.setAttribute('aria-hidden', 'true'));
-            // Add Enter key support for modal inputs
             document.querySelectorAll('.modal input').forEach(input => {
                 input.addEventListener('keydown', e => {
                     if (e.key === 'Enter') {
